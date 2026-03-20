@@ -4,6 +4,7 @@ import heroImg from "@/assets/hero-main.jpg";
 import collectionMen from "@/assets/collection-men.jpg";
 import collectionWomen from "@/assets/collection-women.jpg";
 import collectionNew from "@/assets/collection-new.jpg";
+import collectionThrift from "@/assets/collection-thrift.jpg";
 import aboutImg from "@/assets/about-story.jpg";
 import { products, formatPrice } from "@/lib/products";
 import { useReveal } from "@/hooks/useReveal";
