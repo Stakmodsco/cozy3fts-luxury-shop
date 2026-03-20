@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { ShoppingBag, Menu, X } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { useState, useEffect } from "react";
+import logo from "@/assets/logo.png";
 
 export default function Navbar() {
   const { totalItems, setIsOpen } = useCart();
