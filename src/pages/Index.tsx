@@ -19,6 +19,7 @@ export default function Index() {
     { name: "Men", image: collectionMen, link: "/shop?category=men" },
     { name: "Women", image: collectionWomen, link: "/shop?category=women" },
     { name: "New Arrivals", image: collectionNew, link: "/shop?category=new" },
+    { name: "The Thrift Edit", image: collectionThrift, link: "/thrift" },
   ];
 
   return (
