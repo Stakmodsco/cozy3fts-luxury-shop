@@ -4,6 +4,7 @@ import heroImg from "@/assets/hero-main.jpg";
 import collectionMen from "@/assets/collection-men.jpg";
 import collectionWomen from "@/assets/collection-women.jpg";
 import collectionNew from "@/assets/collection-new.jpg";
+import collectionThrift from "@/assets/collection-thrift.jpg";
 import aboutImg from "@/assets/about-story.jpg";
 import { products, formatPrice } from "@/lib/products";
 import { useReveal } from "@/hooks/useReveal";
@@ -18,6 +19,7 @@ export default function Index() {
     { name: "Men", image: collectionMen, link: "/shop?category=men" },
     { name: "Women", image: collectionWomen, link: "/shop?category=women" },
     { name: "New Arrivals", image: collectionNew, link: "/shop?category=new" },
+    { name: "The Thrift Edit", image: collectionThrift, link: "/thrift" },
   ];
 
   return (
@@ -57,7 +59,7 @@ export default function Index() {
           <p className="text-xs uppercase tracking-wide-caps text-muted-foreground mb-3">Collections</p>
           <h2 className="font-display text-3xl md:text-4xl tracking-display">Explore the Range</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
           {collections.map((col, i) => (
             <Link
               key={col.name}

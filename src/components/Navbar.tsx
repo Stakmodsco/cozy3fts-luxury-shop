@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { ShoppingBag, Menu, X } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { useState, useEffect } from "react";
+import logo from "@/assets/logo.png";
 
 export default function Navbar() {
   const { totalItems, setIsOpen } = useCart();
@@ -22,6 +23,7 @@ export default function Navbar() {
   const navLinks = [
     { to: "/", label: "Home" },
     { to: "/shop", label: "Shop" },
+    { to: "/thrift", label: "Thrift" },
     { to: "/about", label: "About" },
     { to: "/contact", label: "Contact" },
   ];
@@ -35,8 +37,8 @@ export default function Navbar() {
       }`}
     >
       <nav className="section-padding flex items-center justify-between h-16 md:h-20">
-        <Link to="/" className="font-display text-xl md:text-2xl tracking-display font-semibold text-foreground">
-          CoZy 3Fts
+        <Link to="/" className="flex items-center gap-2">
+          <img src={logo} alt="CoZy 3Fts" className="h-10 md:h-12 w-auto" />
         </Link>
 
         <div className="hidden md:flex items-center gap-10">
