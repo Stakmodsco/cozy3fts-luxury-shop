@@ -59,7 +59,7 @@ export default function Index() {
           <p className="text-xs uppercase tracking-wide-caps text-muted-foreground mb-3">Collections</p>
           <h2 className="font-display text-3xl md:text-4xl tracking-display">Explore the Range</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
           {collections.map((col, i) => (
             <Link
               key={col.name}
