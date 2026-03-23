@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { products, formatPrice } from "@/lib/products";
 import { useCart } from "@/lib/cart";
 import { useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ShieldCheck, Award, CheckCircle } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
 import { useReveal } from "@/hooks/useReveal";
 
@@ -22,17 +22,27 @@ export default function ProductDetail() {
     );
   }
 
-  const related = products.filter((p) => p.id !== product.id).slice(0, 4);
+  const related = products
+    .filter((p) => p.id !== product.id && p.category === product.category)
+    .slice(0, 4);
+  if (related.length < 4) {
+    const more = products.filter((p) => p.id !== product.id && !related.includes(p)).slice(0, 4 - related.length);
+    related.push(...more);
+  }
 
   const handleAdd = () => {
     if (!selectedSize) return;
     addItem(product, selectedSize);
   };
 
+  const isThrift = product.category === "thrift";
+  const backLink = isThrift ? "/thrift" : "/shop";
+  const backLabel = isThrift ? "Back to Thrift" : "Back to Shop";
+
   return (
     <div ref={revealRef} className="pt-24 md:pt-28 section-padding pb-20 md:pb-32 min-h-screen">
-      <Link to="/shop" className="reveal inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8">
-        <ArrowLeft className="w-3.5 h-3.5" /> Back to Shop
+      <Link to={backLink} className="reveal inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8">
+        <ArrowLeft className="w-3.5 h-3.5" /> {backLabel}
       </Link>
 
       <div className="reveal grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
@@ -43,11 +53,22 @@ export default function ProductDetail() {
 
         {/* Details */}
         <div className="flex flex-col justify-center">
-          {product.tag && (
-            <span className="text-xs uppercase tracking-wide-caps text-muted-foreground mb-2">
-              {product.tag === "new" ? "New Arrival" : "Best Seller"}
-            </span>
-          )}
+          <div className="flex flex-wrap gap-2 mb-3">
+            {product.tag && (
+              <span className="text-xs uppercase tracking-wide-caps text-muted-foreground">
+                {product.tag === "new" ? "New Arrival" : "Best Seller"}
+              </span>
+            )}
+            {product.sourceTag && (
+              <span className={`text-xs uppercase tracking-wide-caps px-2 py-0.5 rounded-sm ${
+                product.sourceTag === "brand-new"
+                  ? "bg-accent text-accent-foreground"
+                  : "bg-secondary text-secondary-foreground"
+              }`}>
+                {product.sourceTag === "brand-new" ? "Brand New" : "Thrifted"}
+              </span>
+            )}
+          </div>
           <h1 className="font-display text-3xl md:text-4xl tracking-display mb-2">{product.name}</h1>
           <p className="text-lg tabular-nums text-muted-foreground mb-6">{formatPrice(product.price)}</p>
           <p className="text-sm text-muted-foreground leading-relaxed mb-8 max-w-md">{product.description}</p>
@@ -60,7 +81,7 @@ export default function ProductDetail() {
                 <button
                   key={size}
                   onClick={() => setSelectedSize(size)}
-                  className={`w-12 h-12 flex items-center justify-center text-sm rounded-sm border transition-all duration-200 active:scale-[0.95] ${
+                  className={`min-w-[3rem] h-12 flex items-center justify-center text-sm rounded-sm border transition-all duration-200 active:scale-[0.95] px-3 ${
                     selectedSize === size
                       ? "bg-foreground text-primary-foreground border-foreground"
                       : "border-border text-muted-foreground hover:border-foreground hover:text-foreground"
@@ -79,6 +100,33 @@ export default function ProductDetail() {
           >
             {selectedSize ? "Add to Bag" : "Select a Size"}
           </button>
+
+          {/* Verified Authentic Badge — Thrift Only */}
+          {isThrift && (
+            <div className="mt-10 p-5 rounded-sm bg-secondary/60 border border-border">
+              <div className="flex items-center gap-2 mb-3">
+                <ShieldCheck className="w-5 h-5 text-foreground" />
+                <span className="text-sm font-medium uppercase tracking-wide-caps">Verified Authentic</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+                Every thrift item is inspected and authenticated by our team before listing. We guarantee the authenticity of all designer and branded items.
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <CheckCircle className="w-3.5 h-3.5 text-foreground" />
+                  <span>Hand-inspected for quality & condition</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Award className="w-3.5 h-3.5 text-foreground" />
+                  <span>Authenticity verified by experts</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <ShieldCheck className="w-3.5 h-3.5 text-foreground" />
+                  <span>Money-back guarantee if not authentic</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

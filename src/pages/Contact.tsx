@@ -1,7 +1,13 @@
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { useReveal } from "@/hooks/useReveal";
 import { toast } from "sonner";
+
+const TikTokIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.72a8.2 8.2 0 004.76 1.52V6.79a4.84 4.84 0 01-1-.1z"/>
+  </svg>
+);
 
 export default function Contact() {
   const revealRef = useReveal();
@@ -79,8 +85,8 @@ export default function Contact() {
           <div className="flex items-start gap-4">
             <Phone className="w-4 h-4 text-muted-foreground mt-0.5" />
             <div>
-              <p className="text-xs uppercase tracking-wide-caps text-muted-foreground mb-1">Phone</p>
-              <a href="tel:+254700327881" className="text-sm hover:text-muted-foreground transition-colors">+254 700 327 881</a>
+              <p className="text-xs uppercase tracking-wide-caps text-muted-foreground mb-1">Phone / WhatsApp</p>
+              <a href="https://wa.me/254700327881" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-muted-foreground transition-colors">+254 700 327 881</a>
             </div>
           </div>
           <div className="flex items-start gap-4">
@@ -88,6 +94,22 @@ export default function Contact() {
             <div>
               <p className="text-xs uppercase tracking-wide-caps text-muted-foreground mb-1">Location</p>
               <p className="text-sm">Nairobi, Kenya</p>
+            </div>
+          </div>
+
+          {/* Socials */}
+          <div>
+            <p className="text-xs uppercase tracking-wide-caps text-muted-foreground mb-3">Follow Us</p>
+            <div className="flex gap-4">
+              <a href="https://instagram.com/cozy3fts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
+                <Instagram className="w-4 h-4" /> Instagram
+              </a>
+              <a href="https://tiktok.com/@cozy3fts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
+                <TikTokIcon /> TikTok
+              </a>
+              <a href="https://wa.me/254700327881" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
+                <MessageCircle className="w-4 h-4" /> WhatsApp
+              </a>
             </div>
           </div>
         </div>
