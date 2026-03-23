@@ -86,9 +86,13 @@ export default function CartDrawer() {
                   <span className="text-sm text-muted-foreground">Subtotal</span>
                   <span className="font-display text-lg tabular-nums">{formatPrice(totalPrice)}</span>
                 </div>
-                <button className="w-full bg-foreground text-primary-foreground py-3.5 text-sm uppercase tracking-wide-caps font-body font-medium hover:opacity-90 active:scale-[0.98] transition-all duration-200 rounded-sm">
+                <Link
+                  to="/checkout"
+                  onClick={() => setIsOpen(false)}
+                  className="block w-full bg-foreground text-primary-foreground py-3.5 text-sm uppercase tracking-wide-caps font-body font-medium hover:opacity-90 active:scale-[0.98] transition-all duration-200 rounded-sm text-center"
+                >
                   Checkout
-                </button>
+                </Link>
               </div>
             </>
           )}
