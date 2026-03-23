@@ -1,11 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { ShoppingBag, Menu, X, Heart } from "lucide-react";
 import { useCart } from "@/lib/cart";
+import { useWishlist } from "@/lib/wishlist";
 import { useState, useEffect } from "react";
 import logo from "@/assets/logo.png";
 
 export default function Navbar() {
   const { totalItems, setIsOpen } = useCart();
+  const { totalItems: wishlistCount } = useWishlist();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -59,7 +61,19 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          <Link
+            to="/wishlist"
+            className="relative text-foreground hover:text-muted-foreground transition-colors"
+            aria-label="Wishlist"
+          >
+            <Heart className="w-5 h-5" />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-foreground text-primary-foreground text-[10px] flex items-center justify-center font-body">
+                {wishlistCount}
+              </span>
+            )}
+          </Link>
           <button
             onClick={() => setIsOpen(true)}
             className="relative text-foreground hover:text-muted-foreground transition-colors"
@@ -100,6 +114,11 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+          <Link to="/wishlist" className={`text-sm tracking-wide-caps uppercase font-body ${
+            location.pathname === "/wishlist" ? "text-foreground" : "text-muted-foreground"
+          }`}>
+            Wishlist {wishlistCount > 0 && `(${wishlistCount})`}
+          </Link>
         </div>
       </div>
     </header>
