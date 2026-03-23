@@ -24,6 +24,7 @@ export default function Navbar() {
     { to: "/", label: "Home" },
     { to: "/shop", label: "Shop" },
     { to: "/thrift", label: "Thrift" },
+    { to: "/new-arrivals", label: "New In" },
     { to: "/about", label: "About" },
     { to: "/contact", label: "Contact" },
   ];
@@ -39,9 +40,10 @@ export default function Navbar() {
       <nav className="section-padding flex items-center justify-between h-16 md:h-20">
         <Link to="/" className="flex items-center gap-2">
           <img src={logo} alt="CoZy 3Fts" className="h-10 md:h-12 w-auto" />
+          <span className="font-display text-lg md:text-xl tracking-display">CoZy 3Fts</span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex items-center gap-8 lg:gap-10">
           {navLinks.map((link) => (
             <Link
               key={link.to}
@@ -83,7 +85,7 @@ export default function Navbar() {
       {/* Mobile menu */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-400 ${
-          mobileOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
+          mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div className="section-padding pb-6 flex flex-col gap-4 bg-background/95 backdrop-blur-md">

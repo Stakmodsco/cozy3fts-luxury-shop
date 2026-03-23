@@ -18,7 +18,7 @@ export default function Index() {
   const collections = [
     { name: "Men", image: collectionMen, link: "/shop?category=men" },
     { name: "Women", image: collectionWomen, link: "/shop?category=women" },
-    { name: "New Arrivals", image: collectionNew, link: "/shop?category=new" },
+    { name: "New Arrivals", image: collectionNew, link: "/new-arrivals" },
     { name: "The Thrift Edit", image: collectionThrift, link: "/thrift" },
   ];
 
