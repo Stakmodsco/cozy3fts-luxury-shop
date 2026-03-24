@@ -48,7 +48,7 @@ export default function ProductDetail() {
       <div className="reveal grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
         {/* Image */}
         <div className="overflow-hidden rounded-sm bg-secondary aspect-[3/4]">
-          <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+          <img src={product.image} alt={product.name} className="w-full h-full object-cover protected-image" draggable={false} onContextMenu={(e) => e.preventDefault()} />
         </div>
 
         {/* Details */}

@@ -200,10 +200,16 @@ export default function Checkout() {
               <p className="text-sm text-muted-foreground max-w-md mx-auto mb-8">
                 A confirmation has been sent to <span className="font-medium text-foreground">{form.email}</span>. We'll deliver to <span className="font-medium text-foreground">{form.city}</span>.
               </p>
-              <Link to="/shop"
-                className="inline-flex bg-foreground text-primary-foreground py-3.5 px-10 text-sm uppercase tracking-wide-caps font-medium rounded-sm hover:opacity-90 transition-all">
-                Continue Shopping
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link to="/track-order"
+                  className="inline-flex items-center justify-center bg-foreground text-primary-foreground py-3.5 px-10 text-sm uppercase tracking-wide-caps font-medium rounded-sm hover:opacity-90 transition-all">
+                  Track Your Order
+                </Link>
+                <Link to="/shop"
+                  className="inline-flex items-center justify-center border border-border py-3.5 px-10 text-sm uppercase tracking-wide-caps font-medium rounded-sm hover:bg-secondary transition-all">
+                  Continue Shopping
+                </Link>
+              </div>
             </div>
           )}
         </div>

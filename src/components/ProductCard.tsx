@@ -10,13 +10,15 @@ export default function ProductCard({ product }: { product: Product }) {
   return (
     <div className="group relative">
       <Link to={`/product/${product.id}`} className="block">
-        <div className="relative overflow-hidden rounded-sm bg-secondary aspect-[3/4]">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            loading="lazy"
-          />
+         <div className="relative overflow-hidden rounded-sm bg-secondary aspect-[3/4]">
+           <img
+             src={product.image}
+             alt={product.name}
+             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 protected-image"
+             loading="lazy"
+             draggable={false}
+             onContextMenu={(e) => e.preventDefault()}
+           />
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">
             {product.tag && (
               <span className="text-[10px] uppercase tracking-wide-caps bg-foreground text-primary-foreground px-2.5 py-1 rounded-sm font-body">
