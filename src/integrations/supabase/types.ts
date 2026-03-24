@@ -79,7 +79,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      nextval_order_number: { Args: never; Returns: number }
     }
     Enums: {
       [_ in never]: never
