@@ -35,6 +35,7 @@ export default function Footer() {
                 { to: "/shop", label: "Shop" },
                 { to: "/thrift", label: "Thrift" },
                 { to: "/new-arrivals", label: "New In" },
+                { to: "/track-order", label: "Track Order" },
                 { to: "/about", label: "About" },
                 { to: "/contact", label: "Contact" },
               ].map((l) => (
