@@ -5,13 +5,15 @@ import { useReveal } from "@/hooks/useReveal";
 import { ArrowLeft, Phone, CheckCircle, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Checkout() {
-  const { items, totalPrice, setIsOpen } = useCart();
+  const { items, totalPrice, clearCart, setIsOpen } = useCart();
   const revealRef = useReveal();
   const navigate = useNavigate();
   const [step, setStep] = useState<"details" | "payment" | "success">("details");
   const [loading, setLoading] = useState(false);
+  const [orderResult, setOrderResult] = useState<{ order_number: string; mpesa_receipt: string; total: number } | null>(null);
 
   const [form, setForm] = useState({
     firstName: "",
@@ -43,11 +45,45 @@ export default function Checkout() {
 
   const handleMpesaPayment = async () => {
     setLoading(true);
-    // Simulate M-Pesa STK push — in production this would call the Daraja API via an edge function
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    setLoading(false);
-    setStep("success");
-    toast.success("Payment received! Order confirmed.");
+    try {
+      const { data, error } = await supabase.functions.invoke("create-order", {
+        body: {
+          customerName: `${form.firstName} ${form.lastName}`,
+          customerEmail: form.email,
+          customerPhone: form.phone,
+          deliveryAddress: form.address,
+          city: form.city,
+          items: items.map((i) => ({
+            name: i.product.name,
+            size: i.size,
+            qty: i.quantity,
+            price: i.product.price,
+            image: i.product.image,
+          })),
+          subtotal: totalPrice,
+          deliveryFee,
+          total: grandTotal,
+          mpesaPhone: form.mpesaPhone || form.phone,
+        },
+      });
+
+      if (error) throw error;
+
+      const order = data.order;
+      setOrderResult({
+        order_number: order.order_number,
+        mpesa_receipt: order.mpesa_receipt || "",
+        total: order.total,
+      });
+      clearCart();
+      setStep("success");
+      toast.success("Payment received! Order confirmed.");
+    } catch (err) {
+      console.error("Payment error:", err);
+      toast.error("Payment failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -194,11 +230,26 @@ export default function Checkout() {
                 <CheckCircle className="w-8 h-8 text-white" />
               </div>
               <h2 className="font-display text-2xl tracking-display mb-3">Thank You for Your Order!</h2>
+              {orderResult && (
+                <div className="space-y-2 mb-6">
+                  <p className="text-sm text-muted-foreground">
+                    Order Number: <span className="font-medium text-foreground font-mono">{orderResult.order_number}</span>
+                  </p>
+                  {orderResult.mpesa_receipt && (
+                    <p className="text-sm text-muted-foreground">
+                      M-Pesa Receipt: <span className="font-medium text-foreground font-mono">{orderResult.mpesa_receipt}</span>
+                    </p>
+                  )}
+                  <p className="text-sm text-muted-foreground">
+                    Total Paid: <span className="font-medium text-foreground">{formatPrice(orderResult.total)}</span>
+                  </p>
+                </div>
+              )}
               <p className="text-sm text-muted-foreground max-w-md mx-auto mb-2">
-                Your payment of <span className="font-medium text-foreground">{formatPrice(grandTotal)}</span> has been received via M-Pesa.
+                A confirmation has been sent to <span className="font-medium text-foreground">{form.email}</span>.
               </p>
               <p className="text-sm text-muted-foreground max-w-md mx-auto mb-8">
-                A confirmation has been sent to <span className="font-medium text-foreground">{form.email}</span>. We'll deliver to <span className="font-medium text-foreground">{form.city}</span>.
+                We'll deliver to <span className="font-medium text-foreground">{form.city}</span>.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link to="/track-order"
