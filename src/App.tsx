@@ -16,6 +16,7 @@ import Thrift from "./pages/Thrift";
 import NewArrivals from "./pages/NewArrivals";
 import Wishlist from "./pages/Wishlist";
 import Checkout from "./pages/Checkout";
+import OrderTracking from "./pages/OrderTracking";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
