@@ -76,7 +76,7 @@ export default function Navbar() {
           </Link>
           <button
             onClick={() => setIsOpen(true)}
-            className="relative text-foreground hover:text-muted-foreground transition-colors"
+            className="relative text-foreground hover:text-muted-foreground transition-all hover:scale-110 active:scale-90 duration-200"
             aria-label="Open cart"
           >
             <ShoppingBag className="w-5 h-5" />

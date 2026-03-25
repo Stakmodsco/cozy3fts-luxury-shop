@@ -47,7 +47,7 @@ export default function CartDrawer() {
             <>
               <div className="flex-1 overflow-y-auto p-6 space-y-6">
                 {items.map((item) => (
-                  <div key={`${item.product.id}-${item.size}`} className="flex gap-4">
+                  <div key={`${item.product.id}-${item.size}`} className="flex gap-4 cart-item-enter" style={{ animationDelay: `${items.indexOf(item) * 60}ms` }}>
                     <img
                       src={item.product.image}
                       alt={item.product.name}
