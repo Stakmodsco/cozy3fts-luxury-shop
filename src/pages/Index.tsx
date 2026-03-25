@@ -9,6 +9,7 @@ import aboutImg from "@/assets/about-story.jpg";
 import { products, formatPrice } from "@/lib/products";
 import { useReveal } from "@/hooks/useReveal";
 import ProductCard from "@/components/ProductCard";
+import BrandMarquee from "@/components/BrandMarquee";
 
 export default function Index() {
   const revealRef = useReveal();
@@ -107,6 +108,9 @@ export default function Index() {
           ))}
         </div>
       </section>
+
+      {/* Brand Marquee */}
+      <BrandMarquee />
 
       {/* Brand story */}
       <section className="section-padding pb-20 md:pb-32">
