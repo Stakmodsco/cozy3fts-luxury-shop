@@ -9,6 +9,7 @@ import aboutImg from "@/assets/about-story.jpg";
 import { products, formatPrice } from "@/lib/products";
 import { useReveal } from "@/hooks/useReveal";
 import ProductCard from "@/components/ProductCard";
+import BrandMarquee from "@/components/BrandMarquee";
 
 export default function Index() {
   const revealRef = useReveal();
