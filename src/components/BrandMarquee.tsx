@@ -1,7 +1,7 @@
 const brands = [
   "Nike", "Adidas", "Stüssy", "Carhartt WIP", "New Balance",
   "Puma", "The North Face", "Champion", "Converse", "Vans",
-  "Jordan", "Dickies", "Reebok", "FILA", "Timberland",
+  "Jordan", "Dickies", "Reebok", "FILA", "Timberland", "CoZy 3Fts",
 ];
 
 export default function BrandMarquee() {
