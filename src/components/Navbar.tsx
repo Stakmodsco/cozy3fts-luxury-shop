@@ -64,7 +64,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <Link
             to="/wishlist"
-            className="relative text-foreground hover:text-muted-foreground transition-colors"
+            className="relative text-foreground hover:text-muted-foreground transition-colors hover:scale-110 active:scale-90 duration-200"
             aria-label="Wishlist"
           >
             <Heart className="w-5 h-5" />
