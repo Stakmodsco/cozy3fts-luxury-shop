@@ -50,7 +50,7 @@ export default function Navbar() {
             <Link
               key={link.to}
               to={link.to}
-              className={`text-sm font-body tracking-wide-caps uppercase transition-colors duration-200 ${
+              className={`text-sm font-body tracking-wide-caps uppercase transition-colors duration-200 underline-hover ${
                 location.pathname === link.to
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground"
