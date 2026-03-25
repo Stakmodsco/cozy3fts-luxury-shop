@@ -109,6 +109,9 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Brand Marquee */}
+      <BrandMarquee />
+
       {/* Brand story */}
       <section className="section-padding pb-20 md:pb-32">
         <div className="reveal grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">

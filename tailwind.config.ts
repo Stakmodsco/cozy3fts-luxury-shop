@@ -140,6 +140,7 @@ export default {
         "shimmer": "shimmer 2s linear infinite",
         "slide-in-right": "slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
         "stagger-in": "stagger-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "marquee": "marquee 30s linear infinite",
       },
     },
   },
