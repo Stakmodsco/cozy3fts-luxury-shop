@@ -4,7 +4,7 @@ import { formatPrice } from "@/lib/products";
 import { Link } from "react-router-dom";
 
 export default function CartDrawer() {
-  const { items, isOpen, setIsOpen, removeItem, updateQuantity, totalPrice } = useCart();
+  const { items, isOpen, setIsOpen, removeItem, updateQuantity, clearCart, totalPrice } = useCart();
 
   return (
     <>
