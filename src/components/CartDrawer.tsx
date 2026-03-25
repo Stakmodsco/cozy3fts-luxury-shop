@@ -1,10 +1,10 @@
-import { X, Minus, Plus, ShoppingBag } from "lucide-react";
+import { X, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/products";
 import { Link } from "react-router-dom";
 
 export default function CartDrawer() {
-  const { items, isOpen, setIsOpen, removeItem, updateQuantity, totalPrice } = useCart();
+  const { items, isOpen, setIsOpen, removeItem, updateQuantity, clearCart, totalPrice } = useCart();
 
   return (
     <>
@@ -54,9 +54,18 @@ export default function CartDrawer() {
                       className="w-20 h-24 object-cover rounded-sm"
                     />
                     <div className="flex-1 flex flex-col justify-between">
-                      <div>
-                        <p className="text-sm font-body font-medium">{item.product.name}</p>
-                        <p className="text-xs text-muted-foreground mt-0.5">Size: {item.size}</p>
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="text-sm font-body font-medium">{item.product.name}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">Size: {item.size}</p>
+                        </div>
+                        <button
+                          onClick={() => removeItem(item.product.id, item.size)}
+                          className="text-muted-foreground hover:text-destructive transition-colors p-0.5"
+                          aria-label="Remove item"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
@@ -86,6 +95,12 @@ export default function CartDrawer() {
                   <span className="text-sm text-muted-foreground">Subtotal</span>
                   <span className="font-display text-lg tabular-nums">{formatPrice(totalPrice)}</span>
                 </div>
+                <button
+                  onClick={clearCart}
+                  className="w-full text-sm text-muted-foreground hover:text-destructive transition-colors py-1"
+                >
+                  Clear Bag
+                </button>
                 <Link
                   to="/checkout"
                   onClick={() => setIsOpen(false)}
