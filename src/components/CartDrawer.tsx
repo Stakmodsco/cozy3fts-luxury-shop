@@ -54,9 +54,18 @@ export default function CartDrawer() {
                       className="w-20 h-24 object-cover rounded-sm"
                     />
                     <div className="flex-1 flex flex-col justify-between">
-                      <div>
-                        <p className="text-sm font-body font-medium">{item.product.name}</p>
-                        <p className="text-xs text-muted-foreground mt-0.5">Size: {item.size}</p>
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="text-sm font-body font-medium">{item.product.name}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">Size: {item.size}</p>
+                        </div>
+                        <button
+                          onClick={() => removeItem(item.product.id, item.size)}
+                          className="text-muted-foreground hover:text-destructive transition-colors p-0.5"
+                          aria-label="Remove item"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
