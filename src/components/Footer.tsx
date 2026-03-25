@@ -14,7 +14,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-foreground text-primary-foreground">
-      <div className="section-padding py-16 md:py-24">
+      <div className="section-padding py-16 md:py-24 page-enter">
         <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-4">

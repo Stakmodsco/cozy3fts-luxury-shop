@@ -50,7 +50,7 @@ export default function Navbar() {
             <Link
               key={link.to}
               to={link.to}
-              className={`text-sm font-body tracking-wide-caps uppercase transition-colors duration-200 ${
+              className={`text-sm font-body tracking-wide-caps uppercase transition-colors duration-200 underline-hover ${
                 location.pathname === link.to
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground"
@@ -64,24 +64,24 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <Link
             to="/wishlist"
-            className="relative text-foreground hover:text-muted-foreground transition-colors"
+            className="relative text-foreground hover:text-muted-foreground transition-colors hover:scale-110 active:scale-90 duration-200"
             aria-label="Wishlist"
           >
             <Heart className="w-5 h-5" />
             {wishlistCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-foreground text-primary-foreground text-[10px] flex items-center justify-center font-body">
+              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-foreground text-primary-foreground text-[10px] flex items-center justify-center font-body animate-pop">
                 {wishlistCount}
               </span>
             )}
           </Link>
           <button
             onClick={() => setIsOpen(true)}
-            className="relative text-foreground hover:text-muted-foreground transition-colors"
+            className="relative text-foreground hover:text-muted-foreground transition-all hover:scale-110 active:scale-90 duration-200"
             aria-label="Open cart"
           >
             <ShoppingBag className="w-5 h-5" />
             {totalItems > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-foreground text-primary-foreground text-[10px] flex items-center justify-center font-body">
+              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-foreground text-primary-foreground text-[10px] flex items-center justify-center font-body animate-pop">
                 {totalItems}
               </span>
             )}
