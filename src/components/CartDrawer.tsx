@@ -95,6 +95,12 @@ export default function CartDrawer() {
                   <span className="text-sm text-muted-foreground">Subtotal</span>
                   <span className="font-display text-lg tabular-nums">{formatPrice(totalPrice)}</span>
                 </div>
+                <button
+                  onClick={clearCart}
+                  className="w-full text-sm text-muted-foreground hover:text-destructive transition-colors py-1"
+                >
+                  Clear Bag
+                </button>
                 <Link
                   to="/checkout"
                   onClick={() => setIsOpen(false)}
