@@ -54,7 +54,7 @@ export default function BrandMarquee() {
               key={`${brand.name}-${i}`}
               src={brand.logo}
               alt={brand.name}
-              className="h-8 md:h-10 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity duration-300 cursor-default select-none flex-shrink-0 dark:invert"
+              className="h-12 md:h-14 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity duration-300 cursor-default select-none flex-shrink-0 dark:invert"
               loading="lazy"
               draggable={false}
             />
