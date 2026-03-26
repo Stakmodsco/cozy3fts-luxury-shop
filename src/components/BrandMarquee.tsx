@@ -13,7 +13,7 @@ import dickiesLogo from "@/assets/brands/dickies.png";
 import reebokLogo from "@/assets/brands/reebok.png";
 import filaLogo from "@/assets/brands/fila.png";
 import timberlandLogo from "@/assets/brands/timberland.png";
-import cozy3ftsLogo from "@/assets/brands/cozy3fts.png";
+import cozy3ftsLogo from "@/assets/logo.png";
 import neweraLogo from "@/assets/brands/newera.png";
 
 const brands = [
@@ -54,7 +54,7 @@ export default function BrandMarquee() {
               key={`${brand.name}-${i}`}
               src={brand.logo}
               alt={brand.name}
-              className="h-8 md:h-10 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity duration-300 cursor-default select-none flex-shrink-0 dark:invert"
+              className="h-12 md:h-14 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity duration-300 cursor-default select-none flex-shrink-0 dark:invert"
               loading="lazy"
               draggable={false}
             />
