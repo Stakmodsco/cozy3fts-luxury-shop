@@ -13,7 +13,7 @@ import dickiesLogo from "@/assets/brands/dickies.png";
 import reebokLogo from "@/assets/brands/reebok.png";
 import filaLogo from "@/assets/brands/fila.png";
 import timberlandLogo from "@/assets/brands/timberland.png";
-import cozy3ftsLogo from "@/assets/brands/cozy3fts.png";
+import cozy3ftsLogo from "@/assets/logo.png";
 import neweraLogo from "@/assets/brands/newera.png";
 
 const brands = [
