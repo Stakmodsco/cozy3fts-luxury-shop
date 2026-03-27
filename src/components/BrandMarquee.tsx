@@ -71,6 +71,9 @@ const brands = [
   { name: "Under Armour", logo: underarmourLogo },
   { name: "Lacoste", logo: lacosteLogo },
   { name: "ASICS", logo: asicsLogo },
+  { name: "Mitchell & Ness", logo: mitchellnessLogo },
+  { name: "'47 Brand", logo: fortysevenLogo },
+  { name: "Kangol", logo: kangolLogo },
   { name: "CoZy 3Fts", logo: cozy3ftsLogo },
   { name: "New Era", logo: neweraLogo },
 ];
