@@ -33,6 +33,9 @@ import tommyhilfigerLogo from "@/assets/brands/tommyhilfiger.png";
 import hugobossLogo from "@/assets/brands/hugoboss.png";
 import calvinkleinLogo from "@/assets/brands/calvinklein.png";
 import asicsLogo from "@/assets/brands/asics.png";
+import mitchellnessLogo from "@/assets/brands/mitchellness.png";
+import fortysevenLogo from "@/assets/brands/fortyseven.png";
+import kangolLogo from "@/assets/brands/kangol.png";
 
 const brands = [
   { name: "Nike", logo: nikeLogo },
