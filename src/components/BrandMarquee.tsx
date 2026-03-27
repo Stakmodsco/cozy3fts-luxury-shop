@@ -33,6 +33,9 @@ import tommyhilfigerLogo from "@/assets/brands/tommyhilfiger.png";
 import hugobossLogo from "@/assets/brands/hugoboss.png";
 import calvinkleinLogo from "@/assets/brands/calvinklein.png";
 import asicsLogo from "@/assets/brands/asics.png";
+import mitchellnessLogo from "@/assets/brands/mitchellness.png";
+import fortysevenLogo from "@/assets/brands/fortyseven.png";
+import kangolLogo from "@/assets/brands/kangol.png";
 
 const brands = [
   { name: "Nike", logo: nikeLogo },
@@ -68,6 +71,9 @@ const brands = [
   { name: "Under Armour", logo: underarmourLogo },
   { name: "Lacoste", logo: lacosteLogo },
   { name: "ASICS", logo: asicsLogo },
+  { name: "Mitchell & Ness", logo: mitchellnessLogo },
+  { name: "'47 Brand", logo: fortysevenLogo },
+  { name: "Kangol", logo: kangolLogo },
   { name: "CoZy 3Fts", logo: cozy3ftsLogo },
   { name: "New Era", logo: neweraLogo },
 ];
