@@ -37,7 +37,7 @@ export default function About() {
                 We started with a question: why does comfortable clothing have to look basic? From our studio in Nairobi, we set out to create pieces that carry the same weight as high fashion — but feel like home.
               </p>
               <p>
-                Every CoZy 3Fts piece is designed with intention. We source premium fabrics, obsess over fit, and keep our runs limited. This isn't fast fashion. It's slow, considered, and made to last.
+                Every CoZy 3Fts piece is designed with intention. We combine carefully curated thrift pieces (“Cozy Thrifts”) with custom-branded apparel (“Cozy 3 Fits”) for men, women, and kids, covering headwear, upper-body, lower-body, and accessories. We source premium fabrics, obsess over fit, and keep our runs limited. This isn't fast fashion. It's slow, considered, and made to last.
               </p>
               <p>
                 Our name is a reminder: three feet of personal space, your comfort zone — that's where confidence begins. We just make sure you look the part.
