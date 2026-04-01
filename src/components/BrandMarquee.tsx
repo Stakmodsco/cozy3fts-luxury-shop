@@ -40,6 +40,7 @@ import kangolLogo from "@/assets/brands/kangol.png";
 const brands = [
   { name: "Nike", logo: nikeLogo },
   { name: "Adidas", logo: adidasLogo },
+  { name: "New Era", logo: neweraLogo },
   { name: "Louis Vuitton", logo: louisvuittonLogo },
   { name: "Gucci", logo: gucciLogo },
   { name: "Stüssy", logo: stussyLogo },
@@ -75,7 +76,6 @@ const brands = [
   { name: "'47 Brand", logo: fortysevenLogo },
   { name: "Kangol", logo: kangolLogo },
   { name: "CoZy 3Fts", logo: cozy3ftsLogo },
-  { name: "New Era", logo: neweraLogo },
 ];
 
 export default function BrandMarquee() {
@@ -96,7 +96,7 @@ export default function BrandMarquee() {
               key={`${brand.name}-${i}`}
               src={brand.logo}
               alt={brand.name}
-              className="h-10 md:h-12 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity duration-300 cursor-default select-none flex-shrink-0 dark:invert"
+              className="h-12 md:h-14 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity duration-300 cursor-default select-none flex-shrink-0 dark:invert"
               loading="lazy"
               draggable={false}
             />
