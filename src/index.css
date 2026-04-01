@@ -58,14 +58,33 @@
 @layer base {
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
     @apply bg-background text-foreground font-body antialiased;
+    overscroll-behavior-y: none;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
+  }
+
+  input, textarea, select, button {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+
+  @media (min-width: 768px) {
+    input, textarea, select, button {
+      font-size: inherit;
+    }
   }
 }
 
