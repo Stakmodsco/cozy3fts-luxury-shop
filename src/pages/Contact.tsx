@@ -1,4 +1,6 @@
 import { Mail, Phone, MapPin, Instagram, MessageCircle } from "lucide-react";
+import qrTiktok from "@/assets/qr-tiktok.jpg";
+import qrInstagram from "@/assets/qr-instagram.jpg";
 import { useState } from "react";
 import { useReveal } from "@/hooks/useReveal";
 import { toast } from "sonner";
@@ -101,15 +103,26 @@ export default function Contact() {
           <div>
             <p className="text-xs uppercase tracking-wide-caps text-muted-foreground mb-3">Follow Us</p>
             <div className="flex gap-4">
-              <a href="https://instagram.com/cozy3fts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
+              <a href="https://www.instagram.com/cozy3fts?igsh=YzN2cDh6djNndTdq" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
                 <Instagram className="w-4 h-4" /> Instagram
               </a>
-              <a href="https://tiktok.com/@cozy3fts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
+              <a href="https://www.tiktok.com/@cozy.3fts?_r=1&_t=ZS-95PrTo9e113" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
                 <TikTokIcon /> TikTok
               </a>
               <a href="https://wa.me/254700327881" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
                 <MessageCircle className="w-4 h-4" /> WhatsApp
               </a>
+            </div>
+            {/* QR Codes */}
+            <div className="flex gap-6 mt-4">
+              <div className="text-center">
+                <img src={qrInstagram} alt="Instagram QR Code" className="w-24 h-24 rounded-md" loading="lazy" width={96} height={96} />
+                <p className="text-xs text-muted-foreground mt-1">Instagram</p>
+              </div>
+              <div className="text-center">
+                <img src={qrTiktok} alt="TikTok QR Code" className="w-24 h-24 rounded-md" loading="lazy" width={96} height={96} />
+                <p className="text-xs text-muted-foreground mt-1">TikTok</p>
+              </div>
             </div>
           </div>
         </div>

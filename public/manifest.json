@@ -1,0 +1,21 @@
+{
+  "name": "CoZy 3Fts — Elevated Streetwear",
+  "short_name": "CoZy 3Fts",
+  "description": "Premium minimalist streetwear rooted in comfort, crafted in Kenya for the world.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f0ea",
+  "theme_color": "#f5f0ea",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
