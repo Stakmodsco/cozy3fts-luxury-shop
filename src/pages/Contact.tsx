@@ -1,4 +1,6 @@
 import { Mail, Phone, MapPin, Instagram, MessageCircle } from "lucide-react";
+import qrTiktok from "@/assets/qr-tiktok.jpg";
+import qrInstagram from "@/assets/qr-instagram.jpg";
 import { useState } from "react";
 import { useReveal } from "@/hooks/useReveal";
 import { toast } from "sonner";
@@ -110,6 +112,17 @@ export default function Contact() {
               <a href="https://wa.me/254700327881" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
                 <MessageCircle className="w-4 h-4" /> WhatsApp
               </a>
+            </div>
+            {/* QR Codes */}
+            <div className="flex gap-6 mt-4">
+              <div className="text-center">
+                <img src={qrInstagram} alt="Instagram QR Code" className="w-24 h-24 rounded-md" loading="lazy" width={96} height={96} />
+                <p className="text-xs text-muted-foreground mt-1">Instagram</p>
+              </div>
+              <div className="text-center">
+                <img src={qrTiktok} alt="TikTok QR Code" className="w-24 h-24 rounded-md" loading="lazy" width={96} height={96} />
+                <p className="text-xs text-muted-foreground mt-1">TikTok</p>
+              </div>
             </div>
           </div>
         </div>
