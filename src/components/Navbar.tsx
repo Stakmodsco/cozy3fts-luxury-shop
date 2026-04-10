@@ -4,6 +4,7 @@ import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 import { useState, useEffect } from "react";
 import logo from "@/assets/logo.png";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Navbar() {
   const { totalItems, setIsOpen } = useCart();
@@ -61,7 +62,8 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
+          <ThemeToggle />
           <Link
             to="/wishlist"
             className="relative text-foreground hover:text-muted-foreground transition-colors hover:scale-110 active:scale-90 duration-200"
