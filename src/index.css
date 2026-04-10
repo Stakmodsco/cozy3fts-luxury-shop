@@ -53,6 +53,52 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  .dark {
+    --background: 25 15% 8%;
+    --foreground: 40 20% 92%;
+
+    --card: 25 12% 12%;
+    --card-foreground: 40 20% 92%;
+
+    --popover: 25 15% 10%;
+    --popover-foreground: 40 20% 92%;
+
+    --primary: 40 20% 92%;
+    --primary-foreground: 25 15% 8%;
+
+    --secondary: 25 10% 18%;
+    --secondary-foreground: 40 15% 80%;
+
+    --muted: 25 10% 16%;
+    --muted-foreground: 30 8% 55%;
+
+    --accent: 30 20% 30%;
+    --accent-foreground: 40 20% 92%;
+
+    --destructive: 0 60% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 25 10% 20%;
+    --input: 25 10% 20%;
+    --ring: 40 20% 92%;
+
+    --sand: 25 10% 16%;
+    --sand-dark: 25 8% 22%;
+    --charcoal: 40 15% 80%;
+    --cream: 25 12% 12%;
+    --warm-gray: 30 5% 50%;
+    --espresso: 30 10% 70%;
+
+    --sidebar-background: 25 15% 10%;
+    --sidebar-foreground: 40 15% 80%;
+    --sidebar-primary: 40 20% 92%;
+    --sidebar-primary-foreground: 25 15% 8%;
+    --sidebar-accent: 25 10% 16%;
+    --sidebar-accent-foreground: 40 15% 80%;
+    --sidebar-border: 25 10% 18%;
+    --sidebar-ring: 217 91% 60%;
+  }
 }
 
 @layer base {
@@ -154,4 +200,115 @@
   .page-enter {
     animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
+
+  /* Neuromorphic buttons */
+  .btn-neumorph {
+    background: linear-gradient(145deg, hsl(var(--background)), hsl(var(--muted)));
+    box-shadow:
+      6px 6px 12px hsl(var(--border)),
+      -4px -4px 10px hsl(var(--background));
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-neumorph:hover {
+    box-shadow:
+      4px 4px 8px hsl(var(--border)),
+      -3px -3px 7px hsl(var(--background));
+    transform: translateY(-1px);
+  }
+  .btn-neumorph:active {
+    box-shadow:
+      inset 3px 3px 6px hsl(var(--border)),
+      inset -2px -2px 5px hsl(var(--background));
+    transform: scale(0.97);
+  }
+
+  .btn-neumorph-dark {
+    background: linear-gradient(145deg, hsl(var(--foreground)), hsl(var(--charcoal)));
+    box-shadow:
+      6px 6px 14px hsl(var(--foreground) / 0.4),
+      -4px -4px 10px hsl(var(--charcoal) / 0.2);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-neumorph-dark:hover {
+    box-shadow:
+      4px 4px 10px hsl(var(--foreground) / 0.5),
+      -3px -3px 7px hsl(var(--charcoal) / 0.2);
+    transform: translateY(-1px);
+  }
+  .btn-neumorph-dark:active {
+    box-shadow:
+      inset 3px 3px 6px hsl(var(--foreground) / 0.5),
+      inset -2px -2px 5px hsl(var(--charcoal) / 0.1);
+    transform: scale(0.97);
+  }
+}
+
+/* 3D Carousel */
+.carousel-scene,
+.carousel-a3d {
+  display: grid;
+}
+
+.carousel-scene {
+  overflow: hidden;
+  perspective: 35em;
+  mask: linear-gradient(90deg, transparent, red 20% 80%, transparent);
+  -webkit-mask: linear-gradient(90deg, transparent, red 20% 80%, transparent);
+  padding: 2em 0;
+}
+
+.carousel-a3d {
+  place-self: center;
+  transform-style: preserve-3d;
+  animation: carousel-ry 28s linear infinite;
+}
+
+@keyframes carousel-ry {
+  to { rotate: y 1turn; }
+}
+
+.carousel-card {
+  --w: 15em;
+  --ba: calc(360deg / var(--n));
+  grid-area: 1 / 1;
+  width: var(--w);
+  aspect-ratio: 7 / 10;
+  object-fit: cover;
+  border-radius: 1em;
+  backface-visibility: hidden;
+  box-shadow: 0 8px 32px hsl(var(--foreground) / 0.15);
+  transform:
+    rotateY(calc(var(--i) * var(--ba)))
+    translateZ(calc(-1 * (0.5 * var(--w) + 0.5em) / tan(0.5 * var(--ba))));
+}
+
+@media (max-width: 768px) {
+  .carousel-card {
+    --w: 10em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-a3d {
+    animation-duration: 120s;
+  }
+}
+
+/* Contact page 3D text */
+@keyframes float-text {
+  0%, 100% { transform: translateY(0) rotateX(0); }
+  50% { transform: translateY(-8px) rotateX(2deg); }
+}
+
+.animate-float-text {
+  animation: float-text 4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { text-shadow: 0 0 20px hsl(var(--accent) / 0.3), 0 0 40px hsl(var(--accent) / 0.1); }
+  50% { text-shadow: 0 0 30px hsl(var(--accent) / 0.5), 0 0 60px hsl(var(--accent) / 0.2); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
 }

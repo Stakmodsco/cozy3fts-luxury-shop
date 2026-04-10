@@ -10,6 +10,7 @@ import { products, formatPrice } from "@/lib/products";
 import { useReveal } from "@/hooks/useReveal";
 import ProductCard from "@/components/ProductCard";
 import BrandMarquee from "@/components/BrandMarquee";
+import Carousel3D from "@/components/Carousel3D";
 
 export default function Index() {
   const revealRef = useReveal();
@@ -111,6 +112,17 @@ export default function Index() {
 
       {/* Brand Marquee */}
       <BrandMarquee />
+
+      {/* 3D Merchandise Carousel */}
+      <section className="section-padding py-16 md:py-24">
+        <div className="reveal text-center mb-8">
+          <p className="text-xs uppercase tracking-wide-caps text-muted-foreground mb-3">Showcase</p>
+          <h2 className="font-display text-3xl md:text-4xl tracking-display">Our Collection</h2>
+        </div>
+        <div className="reveal">
+          <Carousel3D />
+        </div>
+      </section>
 
       {/* Brand story */}
       <section className="section-padding pb-20 md:pb-32">
