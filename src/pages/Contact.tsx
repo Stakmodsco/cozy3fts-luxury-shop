@@ -101,10 +101,10 @@ export default function Contact() {
           <div>
             <p className="text-xs uppercase tracking-wide-caps text-muted-foreground mb-3">Follow Us</p>
             <div className="flex gap-4">
-              <a href="https://instagram.com/cozy3fts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
+              <a href="https://www.instagram.com/cozy3fts?igsh=YzN2cDh6djNndTdq" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
                 <Instagram className="w-4 h-4" /> Instagram
               </a>
-              <a href="https://tiktok.com/@cozy3fts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
+              <a href="https://www.tiktok.com/@cozy.3fts?_r=1&_t=ZS-95PrTo9e113" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
                 <TikTokIcon /> TikTok
               </a>
               <a href="https://wa.me/254700327881" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-muted-foreground transition-colors">
