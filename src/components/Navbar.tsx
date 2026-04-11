@@ -42,7 +42,7 @@ export default function Navbar() {
     >
       <nav className="section-padding flex items-center justify-between h-16 md:h-20">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="CoZy 3Fts" className="h-10 md:h-12 w-auto" />
+          <img src={logo} alt="CoZy 3Fts" className="h-10 md:h-12 w-auto dark:brightness-0 dark:invert" />
           <span className="font-display text-lg md:text-xl tracking-display">CoZy 3Fts</span>
         </Link>
 
