@@ -20,6 +20,9 @@ const NewArrivals = lazy(() => import("./pages/NewArrivals"));
 const Wishlist = lazy(() => import("./pages/Wishlist"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const OrderTracking = lazy(() => import("./pages/OrderTracking"));
+const FAQ = lazy(() => import("./pages/FAQ"));
+const Returns = lazy(() => import("./pages/Returns"));
+const Shipping = lazy(() => import("./pages/Shipping"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -53,6 +56,9 @@ const App = () => (
                   <Route path="/track-order" element={<OrderTracking />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="/returns" element={<Returns />} />
+                  <Route path="/shipping" element={<Shipping />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
