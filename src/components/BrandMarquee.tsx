@@ -13,7 +13,7 @@ import dickiesLogo from "@/assets/brands/dickies.png";
 import reebokLogo from "@/assets/brands/reebok.png";
 import filaLogo from "@/assets/brands/fila.png";
 import timberlandLogo from "@/assets/brands/timberland.png";
-import cozy3ftsLogo from "@/assets/brands/cozy3fts.png";
+import cozy3ftsLogo from "@/assets/logo.png";
 import neweraLogo from "@/assets/brands/newera.png";
 import louisvuittonLogo from "@/assets/brands/louisvuitton.png";
 import gucciLogo from "@/assets/brands/gucci.png";
@@ -79,7 +79,6 @@ const brands = [
 ];
 
 export default function BrandMarquee() {
-  // Duplicate for seamless loop
   const items = [...brands, ...brands];
 
   return (
@@ -88,7 +87,6 @@ export default function BrandMarquee() {
         Brands We Carry & Love
       </p>
       <div className="relative">
-        {/* Fade edges */}
         <div className="absolute left-0 top-0 bottom-0 w-20 md:w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-20 md:w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
@@ -104,7 +102,7 @@ export default function BrandMarquee() {
               key={`${brand.name}-${i}`}
               src={brand.logo}
               alt={brand.name}
-              className="h-16 md:h-20 lg:h-24 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity duration-300 cursor-default select-none flex-shrink-0 dark:brightness-0 dark:invert"
+              className="h-16 md:h-20 lg:h-24 w-auto object-contain opacity-50 hover:opacity-100 transition-opacity duration-300 cursor-default select-none flex-shrink-0 dark:invert dark:brightness-200"
               loading="lazy"
               draggable={false}
             />
