@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Instagram } from "lucide-react";
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
 const TikTokIcon = () => (
@@ -40,6 +42,31 @@ const MastercardIcon = () => (
 
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubscribe = async () => {
+    const trimmed = email.trim();
+    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    setLoading(true);
+    const { error } = await supabase
+      .from("newsletter_subscribers")
+      .insert({ email: trimmed });
+    setLoading(false);
+
+    if (error) {
+      if (error.code === "23505") {
+        toast.info("You're already subscribed!");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+      return;
+    }
+    toast.success("Welcome to the CoZy family! 🎉");
+    setEmail("");
+  };
 
   return (
     <footer className="bg-foreground text-primary-foreground">
@@ -98,11 +125,16 @@ export default function Footer() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSubscribe()}
                 placeholder="Your email"
                 className="flex-1 bg-primary-foreground/10 border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/30 text-sm px-4 py-2.5 rounded-sm focus:outline-none focus:border-primary-foreground/50 transition-colors"
               />
-              <button className="bg-primary-foreground text-foreground text-sm px-5 py-2.5 rounded-sm font-medium hover:opacity-90 active:scale-[0.97] transition-all">
-                Join
+              <button
+                onClick={handleSubscribe}
+                disabled={loading}
+                className="text-foreground text-sm px-5 py-2.5 rounded-sm font-medium btn-neumorph-dark text-primary-foreground active:scale-[0.97] transition-all disabled:opacity-50"
+              >
+                {loading ? "..." : "Join"}
               </button>
             </div>
             <div className="flex gap-4 mt-6">

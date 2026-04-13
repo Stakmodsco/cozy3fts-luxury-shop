@@ -4,6 +4,7 @@ import { useCart } from "@/lib/cart";
 import { useState } from "react";
 import { ArrowLeft, ShieldCheck, Award, CheckCircle } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
+import ProductImage from "@/components/ProductImage";
 import { useReveal } from "@/hooks/useReveal";
 
 export default function ProductDetail() {
@@ -47,8 +48,8 @@ export default function ProductDetail() {
 
       <div className="reveal grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
         {/* Image */}
-        <div className="overflow-hidden rounded-sm bg-secondary aspect-[3/4] img-3d-float">
-          <img src={product.image} alt={product.name} className="w-full h-full object-cover protected-image" draggable={false} onContextMenu={(e) => e.preventDefault()} />
+        <div className="overflow-hidden rounded-sm bg-secondary img-3d-float">
+          <ProductImage src={product.image} alt={product.name} className="protected-image" />
         </div>
 
         {/* Details */}
@@ -96,7 +97,7 @@ export default function ProductDetail() {
           <button
             onClick={handleAdd}
             disabled={!selectedSize}
-            className="w-full md:w-auto bg-foreground text-primary-foreground py-3.5 px-12 text-sm uppercase tracking-wide-caps font-medium rounded-sm hover:opacity-90 active:scale-[0.98] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full md:w-auto py-3.5 px-12 text-sm uppercase tracking-wide-caps font-medium rounded-sm btn-neumorph-dark text-primary-foreground active:scale-[0.98] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {selectedSize ? "Add to Bag" : "Select a Size"}
           </button>

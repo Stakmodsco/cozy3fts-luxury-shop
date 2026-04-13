@@ -8,12 +8,14 @@ import collectionThrift from "@/assets/collection-thrift.jpg";
 import aboutImg from "@/assets/about-story.jpg";
 import { products, formatPrice } from "@/lib/products";
 import { useReveal } from "@/hooks/useReveal";
+import { useParallax } from "@/hooks/useParallax";
 import ProductCard from "@/components/ProductCard";
 import BrandMarquee from "@/components/BrandMarquee";
 import Carousel3D from "@/components/Carousel3D";
 
 export default function Index() {
   const revealRef = useReveal();
+  const heroParallax = useParallax(0.25);
 
   const bestsellers = products.filter((p) => p.tag === "bestseller" || p.tag === "new").slice(0, 4);
 
@@ -27,11 +29,12 @@ export default function Index() {
   return (
     <div ref={revealRef}>
       {/* Hero */}
-      <section className="relative h-screen min-h-[600px] flex items-end">
+      <section className="relative h-screen min-h-[600px] flex items-end overflow-hidden">
         <img
+          ref={heroParallax}
           src={heroImg}
           alt="CoZy 3Fts campaign"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/10 to-transparent" />
         <div className="relative section-padding pb-16 md:pb-24 w-full">
@@ -46,7 +49,7 @@ export default function Index() {
           </p>
           <Link
             to="/shop"
-            className="inline-flex items-center gap-2 mt-8 bg-primary-foreground text-foreground text-sm uppercase tracking-wide-caps font-medium px-8 py-3.5 rounded-sm hover:opacity-90 active:scale-[0.97] transition-all animate-fade-up"
+            className="inline-flex items-center gap-2 mt-8 text-sm uppercase tracking-wide-caps font-medium px-8 py-3.5 rounded-sm btn-neumorph-dark text-primary-foreground animate-fade-up"
             style={{ animationDelay: "0.3s" }}
           >
             Shop Now
@@ -127,7 +130,7 @@ export default function Index() {
       {/* Brand story */}
       <section className="section-padding pb-20 md:pb-32">
         <div className="reveal grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
-          <div className="overflow-hidden rounded-sm">
+          <div className="overflow-hidden rounded-sm img-3d-float">
             <img src={aboutImg} alt="CoZy 3Fts studio" className="w-full h-auto object-cover" loading="lazy" />
           </div>
           <div>
@@ -140,7 +143,7 @@ export default function Index() {
             </p>
             <Link
               to="/about"
-              className="inline-flex items-center gap-2 text-sm uppercase tracking-wide-caps border-b border-foreground pb-0.5 hover:text-muted-foreground hover:border-muted-foreground transition-colors"
+              className="inline-flex items-center gap-2 text-sm uppercase tracking-wide-caps font-medium px-6 py-3 rounded-sm btn-neumorph"
             >
               Read More <ArrowRight className="w-3.5 h-3.5" />
             </Link>

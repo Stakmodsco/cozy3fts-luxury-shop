@@ -3,6 +3,7 @@ import { Product, formatPrice } from "@/lib/products";
 import { ShieldCheck, Heart } from "lucide-react";
 import { useWishlist } from "@/lib/wishlist";
 import { useState } from "react";
+import ProductImage from "./ProductImage";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { toggleItem, isInWishlist } = useWishlist();
@@ -20,15 +21,8 @@ export default function ProductCard({ product }: { product: Product }) {
   return (
     <div className="group relative">
       <Link to={`/product/${product.id}`} className="block">
-         <div className="relative overflow-hidden rounded-sm bg-secondary aspect-[3/4] img-3d-float">
-           <img
-             src={product.image}
-             alt={product.name}
-             className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 protected-image"
-             loading="lazy"
-             draggable={false}
-             onContextMenu={(e) => e.preventDefault()}
-           />
+         <div className="relative overflow-hidden rounded-sm bg-secondary img-3d-float">
+           <ProductImage src={product.image} alt={product.name} className="protected-image transition-transform duration-700 ease-out group-hover:scale-105" />
           {/* Hover overlay */}
           <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/5 transition-colors duration-500" />
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">
