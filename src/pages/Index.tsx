@@ -66,7 +66,7 @@ export default function Index() {
             <Link
               key={col.name}
               to={col.link}
-              className="reveal group relative overflow-hidden rounded-sm aspect-[3/4]"
+              className="reveal group relative overflow-hidden rounded-sm aspect-[3/4] img-3d-float"
               style={{ transitionDelay: `${i * 80}ms` }}
             >
               <img

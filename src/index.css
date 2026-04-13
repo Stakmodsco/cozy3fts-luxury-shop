@@ -173,6 +173,17 @@
     pointer-events: none;
   }
 
+  .img-3d-float {
+    transform: perspective(800px) rotateY(0deg) rotateX(0deg);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    box-shadow: 0 8px 30px -12px hsl(var(--foreground) / 0.2);
+  }
+  .img-3d-float:hover {
+    transform: perspective(800px) rotateY(-3deg) rotateX(2deg) translateY(-6px) scale(1.02);
+    box-shadow: 12px 20px 40px -15px hsl(var(--foreground) / 0.25),
+                -4px -4px 20px -10px hsl(var(--accent) / 0.1);
+  }
+
   .underline-hover {
     position: relative;
   }
