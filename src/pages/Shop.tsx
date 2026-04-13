@@ -47,8 +47,8 @@ export default function Shop() {
             onClick={() => handleCategory(cat.value)}
             className={`text-xs uppercase tracking-wide-caps px-4 py-2 rounded-sm transition-all duration-200 active:scale-[0.96] ${
               activeCategory === cat.value
-                ? "bg-foreground text-primary-foreground"
-                : "bg-secondary text-muted-foreground hover:text-foreground"
+                ? "btn-neumorph-dark text-primary-foreground"
+                : "btn-neumorph text-muted-foreground hover:text-foreground"
             }`}
           >
             {cat.label}
