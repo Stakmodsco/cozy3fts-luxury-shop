@@ -20,7 +20,7 @@ export default function ProductCard({ product }: { product: Product }) {
   return (
     <div className="group relative">
       <Link to={`/product/${product.id}`} className="block">
-         <div className="relative overflow-hidden rounded-sm bg-secondary aspect-[3/4]">
+         <div className="relative overflow-hidden rounded-sm bg-secondary aspect-[3/4] img-3d-float">
            <img
              src={product.image}
              alt={product.name}
