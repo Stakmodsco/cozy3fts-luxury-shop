@@ -22,7 +22,7 @@ export default function About() {
 
       {/* Full-width image */}
       <section className="reveal section-padding">
-        <div className="overflow-hidden rounded-sm">
+        <div className="overflow-hidden rounded-sm img-3d-float">
           <img src={heroImg} alt="CoZy 3Fts collection" className="w-full h-[50vh] md:h-[60vh] object-cover" loading="lazy" />
         </div>
       </section>
@@ -45,7 +45,7 @@ export default function About() {
             </div>
           </div>
           <div className="reveal" style={{ transitionDelay: "100ms" }}>
-            <img src={aboutImg} alt="CoZy 3Fts studio" className="w-full h-auto rounded-sm" loading="lazy" />
+            <img src={aboutImg} alt="CoZy 3Fts studio" className="w-full h-auto rounded-sm img-3d-float" loading="lazy" />
           </div>
         </div>
       </section>
