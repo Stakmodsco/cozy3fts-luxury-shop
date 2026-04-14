@@ -65,6 +65,7 @@ const App = () => (
               </Suspense>
             </main>
             <Footer />
+            <BackToTop />
           </WishlistProvider>
         </CartProvider>
       </BrowserRouter>
