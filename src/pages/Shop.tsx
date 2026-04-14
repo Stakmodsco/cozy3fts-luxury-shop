@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Search, X } from "lucide-react";
 import { products } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
 import { useReveal } from "@/hooks/useReveal";
@@ -16,13 +17,27 @@ export default function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get("category") || "all";
   const [activeCategory, setActiveCategory] = useState(initialCategory);
+  const [searchQuery, setSearchQuery] = useState("");
   const revealRef = useReveal();
 
   const filtered = useMemo(() => {
-    if (activeCategory === "all") return products;
-    if (activeCategory === "new") return products.filter((p) => p.tag === "new");
-    return products.filter((p) => p.category === activeCategory);
-  }, [activeCategory]);
+    let result = products;
+    if (activeCategory === "new") {
+      result = result.filter((p) => p.tag === "new");
+    } else if (activeCategory !== "all") {
+      result = result.filter((p) => p.category === activeCategory);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [activeCategory, searchQuery]);
 
   const handleCategory = (value: string) => {
     setActiveCategory(value);
@@ -37,6 +52,25 @@ export default function Shop() {
     <div ref={revealRef} className="pt-24 md:pt-28 section-padding pb-20 md:pb-32 min-h-screen">
       <div className="reveal">
         <h1 className="font-display text-4xl md:text-5xl tracking-display mb-8">Shop</h1>
+      </div>
+
+      {/* Search */}
+      <div className="reveal mb-6">
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search products..."
+            className="w-full bg-card text-foreground text-sm py-2.5 pl-10 pr-10 rounded-lg border border-border focus:outline-none focus:border-foreground/30 transition-colors placeholder:text-muted-foreground/50"
+          />
+          {searchQuery && (
+            <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Filters */}
@@ -56,8 +90,8 @@ export default function Shop() {
         ))}
       </div>
 
-      {/* Grid - key forces re-mount so useReveal re-observes new elements */}
-      <div key={activeCategory} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+      {/* Grid */}
+      <div key={`${activeCategory}-${searchQuery}`} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {filtered.map((product, i) => (
           <div key={product.id} className="reveal visible" style={{ transitionDelay: `${i * 60}ms` }}>
             <ProductCard product={product} />
@@ -66,7 +100,9 @@ export default function Shop() {
       </div>
 
       {filtered.length === 0 && (
-        <p className="text-center text-muted-foreground mt-20">No products found in this category.</p>
+        <p className="text-center text-muted-foreground mt-20">
+          {searchQuery ? `No products found for "${searchQuery}".` : "No products found in this category."}
+        </p>
       )}
     </div>
   );
