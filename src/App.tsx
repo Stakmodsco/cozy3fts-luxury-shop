@@ -24,6 +24,8 @@ const OrderTracking = lazy(() => import("./pages/OrderTracking"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Returns = lazy(() => import("./pages/Returns"));
 const Shipping = lazy(() => import("./pages/Shipping"));
+const SizeGuide = lazy(() => import("./pages/SizeGuide"));
+const Admin = lazy(() => import("./pages/Admin"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -60,6 +62,8 @@ const App = () => (
                   <Route path="/faq" element={<FAQ />} />
                   <Route path="/returns" element={<Returns />} />
                   <Route path="/shipping" element={<Shipping />} />
+                  <Route path="/size-guide" element={<SizeGuide />} />
+                  <Route path="/admin" element={<Admin />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>

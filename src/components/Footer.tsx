@@ -119,6 +119,7 @@ export default function Footer() {
                 { to: "/shipping", label: "Shipping" },
                 { to: "/returns", label: "Returns" },
                 { to: "/faq", label: "FAQ" },
+                { to: "/size-guide", label: "Size Guide" },
               ].map((l) => (
                 <Link key={l.to} to={l.to} className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
                   {l.label}
