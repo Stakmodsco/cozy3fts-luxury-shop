@@ -78,7 +78,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-4">
             <div className="flex items-center gap-2 mb-4">
-              <img src={logo} alt="CoZy 3Fts" className="h-8 w-auto brightness-0 invert" />
+              <img src={logo} alt="CoZy 3Fts" className="h-8 w-auto brightness-0 invert dark:invert-0" />
               <span className="font-display text-xl tracking-display">CoZy 3Fts</span>
             </div>
             <p className="text-primary-foreground/60 text-sm leading-relaxed max-w-xs">
