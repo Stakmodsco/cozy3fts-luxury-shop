@@ -4,6 +4,7 @@ import qrInstagram from "@/assets/qr-instagram.png";
 import { useState } from "react";
 import { useReveal } from "@/hooks/useReveal";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const TikTokIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -16,10 +17,24 @@ export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [focused, setFocused] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [sending, setSending] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Message sent! We'll be in touch.");
-    setForm({ name: "", email: "", message: "" });
+    if (sending) return;
+    setSending(true);
+    try {
+      const { error } = await supabase
+        .from("contact_messages")
+        .insert({ name: form.name.trim(), email: form.email.trim(), message: form.message.trim() });
+      if (error) throw error;
+      toast.success("Message sent! We'll be in touch.");
+      setForm({ name: "", email: "", message: "" });
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -107,10 +122,11 @@ export default function Contact() {
             </div>
             <button
               type="submit"
-              className="btn-neumorph-dark text-primary-foreground text-sm uppercase tracking-wide-caps font-medium px-10 py-3.5 rounded-lg flex items-center gap-2 group"
+              disabled={sending}
+              className="btn-neumorph-dark text-primary-foreground text-sm uppercase tracking-wide-caps font-medium px-10 py-3.5 rounded-lg flex items-center gap-2 group disabled:opacity-50"
             >
               <Send className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              Send Message
+              {sending ? "Sending..." : "Send Message"}
             </button>
           </form>
 
@@ -177,7 +193,7 @@ export default function Contact() {
                 </div>
                 <div className="text-center">
                   <div className="btn-neumorph p-3 rounded-xl inline-block">
-                    <img src={qrTiktok} alt="TikTok QR Code" className="w-28 h-28 rounded-md" loading="lazy" width={112} height={112} />
+                    <img src={qrTiktok} alt="TikTok QR Code" className="w-28 h-28 rounded-md dark:invert dark:hue-rotate-180" loading="lazy" width={112} height={112} />
                   </div>
                   <p className="text-xs text-muted-foreground mt-2 font-medium">TikTok</p>
                 </div>
