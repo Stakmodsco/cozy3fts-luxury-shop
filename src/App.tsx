@@ -9,6 +9,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import ScrollToTop from "@/components/ScrollToTop";
+import BackToTop from "@/components/BackToTop";
 import Index from "./pages/Index";
 
 const Shop = lazy(() => import("./pages/Shop"));
@@ -64,6 +65,7 @@ const App = () => (
               </Suspense>
             </main>
             <Footer />
+            <BackToTop />
           </WishlistProvider>
         </CartProvider>
       </BrowserRouter>

@@ -6,11 +6,12 @@ const zones = [
   { zone: "Central Kenya", time: "2–4 business days", fee: "KSh 300", freeAbove: "KSh 5,000" },
   { zone: "Coast & Western", time: "3–5 business days", fee: "KSh 300", freeAbove: "KSh 5,000" },
   { zone: "Other Regions", time: "3–7 business days", fee: "KSh 300", freeAbove: "KSh 5,000" },
+  { zone: "International", time: "7–21 business days", fee: "Varies", freeAbove: "—" },
 ];
 
 const highlights = [
-  { icon: Truck, title: "Countrywide Delivery", desc: "We deliver to all major towns across Kenya." },
-  { icon: Gift, title: "Free Shipping Over KSh 5,000", desc: "Orders above KSh 5,000 qualify for free delivery." },
+  { icon: Truck, title: "Countrywide & Worldwide", desc: "We deliver across Kenya and ship internationally to all major destinations." },
+  { icon: Gift, title: "Free Local Shipping Over KSh 5,000", desc: "Kenyan orders above KSh 5,000 qualify for free delivery." },
   { icon: Clock, title: "Order Processing", desc: "Orders are processed within 24 hours on business days." },
   { icon: MapPin, title: "Order Tracking", desc: "Track your order in real-time using your order number." },
 ];
@@ -27,7 +28,7 @@ export default function Shipping() {
               Shipping Information
             </h1>
             <p className="text-muted-foreground mb-16 max-w-2xl">
-              We deliver across Kenya. Here's everything you need to know about getting your CoZy gear.
+              We deliver across Kenya and ship worldwide. Here's everything you need to know about getting your CoZy gear.
             </p>
           </div>
 
@@ -72,7 +73,7 @@ export default function Shipping() {
               </table>
             </div>
             <p className="text-xs text-muted-foreground mt-6">
-              * Delivery times are estimates and may vary due to weather, holidays, or high order volumes.
+              * Delivery times are estimates and may vary due to weather, holidays, or high order volumes. International shipping fees are calculated at checkout based on destination and package weight.
             </p>
           </div>
         </div>
