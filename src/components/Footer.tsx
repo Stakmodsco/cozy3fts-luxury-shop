@@ -18,25 +18,28 @@ const WhatsAppIcon = () => (
 );
 
 const MpesaIcon = () => (
-  <svg viewBox="0 0 100 32" className="h-6 w-auto">
-    <rect rx="4" fill="hsl(var(--primary-foreground))" fillOpacity="0.15" width="100" height="32"/>
-    <text x="50" y="21" textAnchor="middle" fill="currentColor" fontSize="12" fontWeight="bold" fontFamily="sans-serif">M-PESA</text>
+  <svg viewBox="0 0 100 36" className="h-7 w-auto">
+    <rect rx="6" fill="#4CAF50" width="100" height="36"/>
+    <text x="50" y="15" textAnchor="middle" fill="#FFFFFF" fontSize="8" fontWeight="bold" fontFamily="sans-serif">Safaricom</text>
+    <text x="50" y="28" textAnchor="middle" fill="#FFFFFF" fontSize="12" fontWeight="bold" fontFamily="sans-serif">M-PESA</text>
   </svg>
 );
 
 const VisaIcon = () => (
-  <svg viewBox="0 0 48 32" className="h-6 w-auto">
-    <rect rx="4" fill="hsl(var(--primary-foreground))" fillOpacity="0.15" width="48" height="32"/>
-    <text x="24" y="21" textAnchor="middle" fill="currentColor" fontSize="11" fontWeight="bold" fontFamily="sans-serif">VISA</text>
+  <svg viewBox="0 0 60 36" className="h-7 w-auto">
+    <rect rx="6" fill="#FFFFFF" width="60" height="36"/>
+    <rect x="0" y="0" width="60" height="5" fill="#1A1F71"/>
+    <rect x="0" y="31" width="60" height="5" rx="0" fill="#F7B600"/>
+    <text x="30" y="23" textAnchor="middle" fill="#1A1F71" fontSize="16" fontWeight="bold" fontStyle="italic" fontFamily="sans-serif">VISA</text>
   </svg>
 );
 
 const MastercardIcon = () => (
-  <svg viewBox="0 0 48 32" className="h-6 w-auto">
-    <rect rx="4" fill="hsl(var(--primary-foreground))" fillOpacity="0.15" width="48" height="32"/>
-    <circle cx="19" cy="16" r="8" fill="currentColor" fillOpacity="0.3"/>
-    <circle cx="29" cy="16" r="8" fill="currentColor" fillOpacity="0.3"/>
-    <text x="24" y="30" textAnchor="middle" fill="currentColor" fontSize="5" fontFamily="sans-serif">Mastercard</text>
+  <svg viewBox="0 0 60 36" className="h-7 w-auto">
+    <rect rx="6" fill="#252525" width="60" height="36"/>
+    <circle cx="23" cy="18" r="10" fill="#EB001B"/>
+    <circle cx="37" cy="18" r="10" fill="#F79E1B"/>
+    <path d="M30 10.5a10 10 0 000 15 10 10 0 000-15z" fill="#FF5F00"/>
   </svg>
 );
 

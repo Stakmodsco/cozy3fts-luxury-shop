@@ -6,6 +6,7 @@ const zones = [
   { zone: "Central Kenya", time: "2–4 business days", fee: "KSh 300", freeAbove: "KSh 5,000" },
   { zone: "Coast & Western", time: "3–5 business days", fee: "KSh 300", freeAbove: "KSh 5,000" },
   { zone: "Other Regions", time: "3–7 business days", fee: "KSh 300", freeAbove: "KSh 5,000" },
+  { zone: "International", time: "7–21 business days", fee: "Varies", freeAbove: "—" },
 ];
 
 const highlights = [
