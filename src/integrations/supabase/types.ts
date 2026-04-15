@@ -119,6 +119,54 @@ export type Database = {
         }
         Relationships: []
       }
+      products: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          id: string
+          image_alt: string | null
+          image_url: string
+          name: string
+          price: number
+          sizes: string[]
+          source_tag: string | null
+          tag: string | null
+          thrift_category: string | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string
+          id: string
+          image_alt?: string | null
+          image_url: string
+          name: string
+          price: number
+          sizes?: string[]
+          source_tag?: string | null
+          tag?: string | null
+          thrift_category?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          image_alt?: string | null
+          image_url?: string
+          name?: string
+          price?: number
+          sizes?: string[]
+          source_tag?: string | null
+          tag?: string | null
+          thrift_category?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
