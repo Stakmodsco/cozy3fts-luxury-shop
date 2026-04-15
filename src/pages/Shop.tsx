@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search, X } from "lucide-react";
-import { products } from "@/lib/products";
+import { useProducts } from "@/hooks/useProducts";
 import ProductCard from "@/components/ProductCard";
 import { useReveal } from "@/hooks/useReveal";
 
@@ -19,9 +19,10 @@ export default function Shop() {
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [searchQuery, setSearchQuery] = useState("");
   const revealRef = useReveal();
+  const { products, loading } = useProducts();
 
   const filtered = useMemo(() => {
-    let result = products;
+    let result = products.filter((p) => p.category !== "thrift");
     if (activeCategory === "new") {
       result = result.filter((p) => p.tag === "new");
     } else if (activeCategory !== "all") {
@@ -37,7 +38,7 @@ export default function Shop() {
       );
     }
     return result;
-  }, [activeCategory, searchQuery]);
+  }, [activeCategory, searchQuery, products]);
 
   const handleCategory = (value: string) => {
     setActiveCategory(value);
@@ -91,18 +92,26 @@ export default function Shop() {
       </div>
 
       {/* Grid */}
-      <div key={`${activeCategory}-${searchQuery}`} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {filtered.map((product, i) => (
-          <div key={product.id} className="reveal visible" style={{ transitionDelay: `${i * 60}ms` }}>
-            <ProductCard product={product} />
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <div className="w-6 h-6 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : (
+        <>
+          <div key={`${activeCategory}-${searchQuery}`} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {filtered.map((product, i) => (
+              <div key={product.id} className="reveal visible" style={{ transitionDelay: `${i * 60}ms` }}>
+                <ProductCard product={product} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {filtered.length === 0 && (
-        <p className="text-center text-muted-foreground mt-20">
-          {searchQuery ? `No products found for "${searchQuery}".` : "No products found in this category."}
-        </p>
+          {filtered.length === 0 && (
+            <p className="text-center text-muted-foreground mt-20">
+              {searchQuery ? `No products found for "${searchQuery}".` : "No products found in this category."}
+            </p>
+          )}
+        </>
       )}
     </div>
   );

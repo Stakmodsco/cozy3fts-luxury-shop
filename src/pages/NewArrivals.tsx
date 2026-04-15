@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { products } from "@/lib/products";
+import { useProducts } from "@/hooks/useProducts";
 import ProductCard from "@/components/ProductCard";
 import { useReveal } from "@/hooks/useReveal";
 
@@ -12,12 +12,13 @@ const sourceFilters = [
 export default function NewArrivals() {
   const [activeSource, setActiveSource] = useState("all");
   const revealRef = useReveal();
+  const { products, loading } = useProducts();
 
   const newProducts = useMemo(() => {
     const base = products.filter((p) => p.tag === "new");
     if (activeSource === "all") return base;
     return base.filter((p) => p.sourceTag === activeSource);
-  }, [activeSource]);
+  }, [activeSource, products]);
 
   return (
     <div ref={revealRef} className="pt-24 md:pt-28 section-padding pb-20 md:pb-32 min-h-screen">
@@ -47,16 +48,24 @@ export default function NewArrivals() {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {newProducts.map((product, i) => (
-          <div key={product.id} className="reveal" style={{ transitionDelay: `${i * 60}ms` }}>
-            <ProductCard product={product} />
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <div className="w-6 h-6 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {newProducts.map((product, i) => (
+              <div key={product.id} className="reveal" style={{ transitionDelay: `${i * 60}ms` }}>
+                <ProductCard product={product} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {newProducts.length === 0 && (
-        <p className="text-center text-muted-foreground mt-20">No new arrivals in this category yet.</p>
+          {newProducts.length === 0 && (
+            <p className="text-center text-muted-foreground mt-20">No new arrivals in this category yet.</p>
+          )}
+        </>
       )}
     </div>
   );

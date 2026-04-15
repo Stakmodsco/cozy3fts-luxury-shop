@@ -6,7 +6,8 @@ import collectionWomen from "@/assets/collection-women.jpg";
 import collectionNew from "@/assets/collection-new.jpg";
 import collectionThrift from "@/assets/collection-thrift.jpg";
 import aboutImg from "@/assets/about-story.jpg";
-import { products, formatPrice } from "@/lib/products";
+import { formatPrice } from "@/lib/products";
+import { useProducts } from "@/hooks/useProducts";
 import { useReveal } from "@/hooks/useReveal";
 import { useParallax } from "@/hooks/useParallax";
 import ProductCard from "@/components/ProductCard";
@@ -16,6 +17,7 @@ import Carousel3D from "@/components/Carousel3D";
 export default function Index() {
   const revealRef = useReveal();
   const heroParallax = useParallax(0.25);
+  const { products } = useProducts();
 
   const bestsellers = products.filter((p) => p.tag === "bestseller" || p.tag === "new").slice(0, 4);
 

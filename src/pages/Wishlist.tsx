@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { products } from "@/lib/products";
+import { useProducts } from "@/hooks/useProducts";
 import { useWishlist } from "@/lib/wishlist";
 import ProductCard from "@/components/ProductCard";
 import { useReveal } from "@/hooks/useReveal";
@@ -9,10 +9,11 @@ import { Link } from "react-router-dom";
 export default function Wishlist() {
   const revealRef = useReveal();
   const { isInWishlist } = useWishlist();
+  const { products, loading } = useProducts();
 
   const wishlistProducts = useMemo(() => {
     return products.filter((p) => isInWishlist(p.id));
-  }, [isInWishlist]);
+  }, [isInWishlist, products]);
 
   return (
     <div ref={revealRef} className="pt-24 md:pt-28 section-padding pb-20 md:pb-32 min-h-screen">
@@ -24,7 +25,11 @@ export default function Wishlist() {
         </p>
       </div>
 
-      {wishlistProducts.length > 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <div className="w-6 h-6 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : wishlistProducts.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {wishlistProducts.map((product, i) => (
             <div key={product.id} className="reveal" style={{ transitionDelay: `${i * 60}ms` }}>
