@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { products } from "@/lib/products";
+import { useProducts } from "@/hooks/useProducts";
 import ProductCard from "@/components/ProductCard";
 import { useReveal } from "@/hooks/useReveal";
 
@@ -14,12 +14,13 @@ const thriftCategories = [
 export default function Thrift() {
   const [active, setActive] = useState("all");
   const revealRef = useReveal();
+  const { products, loading } = useProducts();
 
   const thriftProducts = useMemo(() => {
     const base = products.filter((p) => p.category === "thrift");
     if (active === "all") return base;
     return base.filter((p) => p.thriftCategory === active);
-  }, [active]);
+  }, [active, products]);
 
   return (
     <div ref={revealRef} className="pt-24 md:pt-28 section-padding pb-20 md:pb-32 min-h-screen">
@@ -50,16 +51,24 @@ export default function Thrift() {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {thriftProducts.map((product, i) => (
-          <div key={product.id} className="reveal" style={{ transitionDelay: `${i * 60}ms` }}>
-            <ProductCard product={product} />
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <div className="w-6 h-6 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {thriftProducts.map((product, i) => (
+              <div key={product.id} className="reveal" style={{ transitionDelay: `${i * 60}ms` }}>
+                <ProductCard product={product} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {thriftProducts.length === 0 && (
-        <p className="text-center text-muted-foreground mt-20">No items found in this category.</p>
+          {thriftProducts.length === 0 && (
+            <p className="text-center text-muted-foreground mt-20">No items found in this category.</p>
+          )}
+        </>
       )}
     </div>
   );

@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
-import { products, formatPrice } from "@/lib/products";
+import { formatPrice } from "@/lib/products";
+import { useProducts } from "@/hooks/useProducts";
 import { useCart } from "@/lib/cart";
 import { useState } from "react";
 import { ArrowLeft, ShieldCheck, Award, CheckCircle } from "lucide-react";
@@ -9,10 +10,19 @@ import { useReveal } from "@/hooks/useReveal";
 
 export default function ProductDetail() {
   const { id } = useParams();
+  const { products, loading } = useProducts();
   const product = products.find((p) => p.id === id);
   const { addItem } = useCart();
   const [selectedSize, setSelectedSize] = useState("");
   const revealRef = useReveal();
+
+  if (loading) {
+    return (
+      <div className="pt-32 section-padding text-center min-h-screen flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (!product) {
     return (
