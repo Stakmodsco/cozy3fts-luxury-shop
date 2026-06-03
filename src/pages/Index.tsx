@@ -1,22 +1,19 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import heroImg from "@/assets/hero-main.jpg";
 import collectionMen from "@/assets/collection-men.jpg";
 import collectionWomen from "@/assets/collection-women.jpg";
 import collectionNew from "@/assets/collection-new.jpg";
 import collectionThrift from "@/assets/collection-thrift.jpg";
 import aboutImg from "@/assets/about-story.jpg";
-import { formatPrice } from "@/lib/products";
 import { useProducts } from "@/hooks/useProducts";
 import { useReveal } from "@/hooks/useReveal";
-import { useParallax } from "@/hooks/useParallax";
 import ProductCard from "@/components/ProductCard";
 import BrandMarquee from "@/components/BrandMarquee";
 import Carousel3D from "@/components/Carousel3D";
+import HeroCarousel from "@/components/HeroCarousel";
 
 export default function Index() {
   const revealRef = useReveal();
-  const heroParallax = useParallax(0.25);
   const { products } = useProducts();
 
   const bestsellers = products.filter((p) => p.tag === "bestseller" || p.tag === "new").slice(0, 4);
@@ -30,35 +27,7 @@ export default function Index() {
 
   return (
     <div ref={revealRef}>
-      {/* Hero */}
-      <section className="relative h-screen min-h-[600px] flex items-end overflow-hidden">
-        <img
-          ref={heroParallax}
-          src={heroImg}
-          alt="CoZy 3Fts campaign"
-          className="absolute inset-0 w-full h-full object-cover scale-110"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/10 to-transparent" />
-        <div className="relative section-padding pb-16 md:pb-24 w-full">
-          <h1
-            className="font-display text-primary-foreground text-4xl md:text-6xl lg:text-7xl tracking-display leading-[1.05] max-w-2xl animate-fade-up"
-            style={{ textWrap: "balance" } as React.CSSProperties}
-          >
-            Redefining Comfort. Elevated Streetwear.
-          </h1>
-          <p className="text-primary-foreground/70 text-sm md:text-base mt-4 max-w-md animate-fade-up" style={{ animationDelay: "0.15s" }}>
-            Premium essentials crafted in Nairobi — built for the culture, worn by the world.
-          </p>
-          <Link
-            to="/shop"
-            className="inline-flex items-center gap-2 mt-8 text-sm uppercase tracking-wide-caps font-medium px-8 py-3.5 rounded-sm btn-neumorph-dark text-primary-foreground animate-fade-up"
-            style={{ animationDelay: "0.3s" }}
-          >
-            Shop Now
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </section>
+      <HeroCarousel />
 
       {/* Collections */}
       <section className="section-padding py-20 md:py-32">
