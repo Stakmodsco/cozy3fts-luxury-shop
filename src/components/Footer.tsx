@@ -1,27 +1,18 @@
 import { Link } from "react-router-dom";
-import { Instagram } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
-const TikTokIcon = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.72a8.2 8.2 0 004.76 1.52V6.79a4.84 4.84 0 01-1-.1z"/>
-  </svg>
-);
-
-const WhatsAppIcon = () => (
-  <svg viewBox="0 0 175.216 175.552" className="w-4 h-4">
-    <defs>
-      <linearGradient id="wa-grad" x1="85.915" y1="175.016" x2="85.915" y2="0.596" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#20b038"/>
-        <stop offset="1" stopColor="#60d66a"/>
-      </linearGradient>
-    </defs>
-    <path fill="url(#wa-grad)" d="M87.184.56C39.132.56 0 39.474 0 87.085c0 15.32 4.08 30.2 11.822 43.275L.224 175.552l46.484-12.088a87.8 87.8 0 0040.476 9.93c48.052 0 87.032-38.914 87.032-86.525S135.236.56 87.184.56z"/>
-    <path fill="#fff" d="M126.066 101.477c-1.83-.914-10.826-5.34-12.506-5.952-1.68-.612-2.902-.916-4.124.916-1.222 1.83-4.736 5.952-5.806 7.174-1.07 1.222-2.14 1.374-3.97.458-1.83-.916-7.728-2.848-14.72-9.084-5.442-4.854-9.116-10.852-10.186-12.682-1.07-1.83-.114-2.82.804-3.732.824-.82 1.83-2.136 2.748-3.204.916-1.07 1.222-1.83 1.834-3.052.612-1.222.306-2.292-.152-3.208-.458-.916-4.124-9.942-5.652-13.61-1.488-3.576-2.998-3.092-4.124-3.148-1.07-.054-2.292-.066-3.514-.066-1.222 0-3.208.458-4.888 2.29-1.68 1.83-6.416 6.268-6.416 15.29 0 9.024 6.568 17.742 7.484 18.964.916 1.222 12.93 19.736 31.326 27.682 4.374 1.888 7.788 3.016 10.452 3.862 4.394 1.394 8.394 1.198 11.556.726 3.526-.526 10.826-4.426 12.354-8.7 1.528-4.274 1.528-7.942 1.07-8.706-.458-.764-1.68-1.222-3.51-2.136z"/>
-  </svg>
+// Windows 11 Fluency colored icons from icons8 (https://icons8.com/icons/fluency)
+const FluencyIcon = ({ name, label }: { name: string; label: string }) => (
+  <img
+    src={`https://img.icons8.com/fluency/96/${name}.png`}
+    alt={label}
+    className="w-6 h-6 select-none"
+    loading="lazy"
+    draggable={false}
+  />
 );
 
 const MpesaIcon = () => (
@@ -149,14 +140,14 @@ export default function Footer() {
               </button>
             </div>
             <div className="flex gap-4 mt-6">
-              <a href="https://www.instagram.com/cozy3fts?igsh=YzN2cDh6djNndTdq" target="_blank" rel="noopener noreferrer" className="text-primary-foreground/50 hover:text-primary-foreground transition-colors" aria-label="Instagram">
-                <Instagram className="w-4 h-4" />
+              <a href="https://www.instagram.com/cozy3fts?igsh=YzN2cDh6djNndTdq" target="_blank" rel="noopener noreferrer" className="opacity-90 hover:opacity-100 hover:scale-110 transition-all" aria-label="Instagram">
+                <FluencyIcon name="instagram-new" label="Instagram" />
               </a>
-              <a href="https://www.tiktok.com/@cozy.3fts?_r=1&_t=ZS-95PrTo9e113" target="_blank" rel="noopener noreferrer" className="text-primary-foreground/50 hover:text-primary-foreground transition-colors" aria-label="TikTok">
-                <TikTokIcon />
+              <a href="https://www.tiktok.com/@cozy.3fts?_r=1&_t=ZS-95PrTo9e113" target="_blank" rel="noopener noreferrer" className="opacity-90 hover:opacity-100 hover:scale-110 transition-all" aria-label="TikTok">
+                <FluencyIcon name="tiktok" label="TikTok" />
               </a>
-              <a href="https://wa.me/254700327881" target="_blank" rel="noopener noreferrer" className="text-primary-foreground/50 hover:text-primary-foreground transition-colors" aria-label="WhatsApp">
-                <WhatsAppIcon />
+              <a href="https://wa.me/254700327881" target="_blank" rel="noopener noreferrer" className="opacity-90 hover:opacity-100 hover:scale-110 transition-all" aria-label="WhatsApp">
+                <FluencyIcon name="whatsapp" label="WhatsApp" />
               </a>
             </div>
 
