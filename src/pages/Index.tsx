@@ -5,7 +5,6 @@ import collectionWomen from "@/assets/collection-women.jpg";
 import collectionNew from "@/assets/collection-new.jpg";
 import collectionThrift from "@/assets/collection-thrift.jpg";
 import aboutImg from "@/assets/about-story.jpg";
-import { formatPrice } from "@/lib/products";
 import { useProducts } from "@/hooks/useProducts";
 import { useReveal } from "@/hooks/useReveal";
 import ProductCard from "@/components/ProductCard";
