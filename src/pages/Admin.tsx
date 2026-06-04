@@ -148,6 +148,15 @@ export default function Admin() {
     });
 
   const handleImageUpload = async (file: File) => {
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be under 5MB");
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      toast.error("File must be an image");
+      return;
+    }
+    setUploading(true);
     try {
       const base64 = await fileToBase64(file);
       const data = await callAdminFn({
@@ -159,12 +168,29 @@ export default function Admin() {
     } catch (err) {
       toast.error((err as Error).message);
     }
+    setUploading(false);
+  };
+
+  const validateProduct = (p: ProductRow): Record<string, string> => {
+    const errs: Record<string, string> = {};
+    if (!p.id.trim()) errs.id = "ID is required";
+    else if (!/^[a-z0-9-]+$/i.test(p.id)) errs.id = "Use letters, numbers, and dashes only";
+    if (!p.name.trim()) errs.name = "Name is required";
+    else if (p.name.length > 120) errs.name = "Name too long";
+    if (!p.image_url.trim()) errs.image_url = "Image is required";
+    if (!Number.isFinite(p.price) || p.price <= 0) errs.price = "Price must be positive";
+    if (!Number.isInteger(p.stock) || p.stock < 0) errs.stock = "Stock must be 0 or more";
+    if (!p.sizes.length) errs.sizes = "Add at least one size";
+    if (p.description.length > 2000) errs.description = "Description too long";
+    return errs;
   };
 
   const handleSaveProduct = async () => {
     if (!editing) return;
-    if (!editing.name || !editing.image_url || !editing.id) {
-      toast.error("ID, name and image are required.");
+    const errs = validateProduct(editing);
+    setErrors(errs);
+    if (Object.keys(errs).length) {
+      toast.error("Please fix the highlighted fields.");
       return;
     }
     setSaving(true);
@@ -182,9 +208,12 @@ export default function Admin() {
         image_url: editing.image_url,
         image_alt: editing.image_alt || null,
         description: editing.description,
+        published: editing.published,
+        stock: editing.stock,
       };
       if (isNew) {
-        await callAdminFn({ action: "create", product: payload });
+        const nextOrder = ((products[products.length - 1]?.display_order) || 0) + 10;
+        await callAdminFn({ action: "create", product: { ...payload, display_order: nextOrder } });
         toast.success("Product created");
       } else {
         const { id, ...rest } = payload;
@@ -192,11 +221,48 @@ export default function Admin() {
         toast.success("Product updated");
       }
       setEditing(null);
+      setErrors({});
       fetchData();
     } catch (err) {
       toast.error((err as Error).message);
     }
     setSaving(false);
+  };
+
+  const togglePublish = async (p: ProductRow) => {
+    try {
+      await callAdminFn({ action: "update", id: p.id, product: { published: !p.published } });
+      setProducts((prev) => prev.map((x) => (x.id === p.id ? { ...x, published: !p.published } : x)));
+      toast.success(!p.published ? "Published" : "Moved to drafts");
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
+  };
+
+  const onDragStart = (id: string) => setDragId(id);
+  const onDragOver = (e: React.DragEvent, id: string) => {
+    e.preventDefault();
+    if (id !== dragOverId) setDragOverId(id);
+  };
+  const onDrop = async (targetId: string) => {
+    const sourceId = dragId;
+    setDragId(null);
+    setDragOverId(null);
+    if (!sourceId || sourceId === targetId) return;
+    const fromIdx = products.findIndex((p) => p.id === sourceId);
+    const toIdx = products.findIndex((p) => p.id === targetId);
+    if (fromIdx === -1 || toIdx === -1) return;
+    const reordered = [...products];
+    const [moved] = reordered.splice(fromIdx, 1);
+    reordered.splice(toIdx, 0, moved);
+    setProducts(reordered);
+    try {
+      await callAdminFn({ action: "reorder", order: reordered.map((p) => p.id) });
+      toast.success("Order updated");
+    } catch (err) {
+      toast.error((err as Error).message);
+      fetchData();
+    }
   };
 
   const handleDeleteProduct = async (id: string) => {
