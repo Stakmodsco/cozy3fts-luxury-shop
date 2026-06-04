@@ -70,6 +70,10 @@ export default function Admin() {
   const [editing, setEditing] = useState<ProductRow | null>(null);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,7 +111,8 @@ export default function Admin() {
         const { data } = await supabase
           .from("products")
           .select("*")
-          .order("created_at", { ascending: false });
+          .order("display_order", { ascending: true })
+          .order("created_at", { ascending: true });
         setProducts((data as ProductRow[]) || []);
       }
     } catch {
