@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Mail, ShoppingCart, Package, Plus, Pencil, Trash2, X } from "lucide-react";
+import { Mail, ShoppingCart, Package, Plus, Pencil, Trash2, X, GripVertical, Eye, EyeOff, Upload } from "lucide-react";
 
 const ADMIN_PASSWORD = "cozy3fts2025";
 const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-products`;
@@ -38,6 +38,9 @@ interface ProductRow {
   image_url: string;
   image_alt: string | null;
   description: string;
+  published: boolean;
+  stock: number;
+  display_order: number;
 }
 
 const emptyProduct: ProductRow = {
@@ -52,6 +55,9 @@ const emptyProduct: ProductRow = {
   image_url: "",
   image_alt: null,
   description: "",
+  published: true,
+  stock: 10,
+  display_order: 0,
 };
 
 export default function Admin() {
