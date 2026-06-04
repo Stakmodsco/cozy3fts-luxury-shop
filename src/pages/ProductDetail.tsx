@@ -43,12 +43,15 @@ export default function ProductDetail() {
 
   const handleAdd = () => {
     if (!selectedSize) return;
+    if ((product.stock ?? 0) <= 0) return;
     addItem(product, selectedSize);
   };
 
   const isThrift = product.category === "thrift";
   const backLink = isThrift ? "/thrift" : "/shop";
   const backLabel = isThrift ? "Back to Thrift" : "Back to Shop";
+  const outOfStock = (product.stock ?? 0) <= 0;
+  const lowStock = !outOfStock && (product.stock ?? 0) <= 3;
 
   return (
     <div ref={revealRef} className="pt-24 md:pt-28 section-padding pb-20 md:pb-32 min-h-screen">
@@ -82,6 +85,11 @@ export default function ProductDetail() {
           </div>
           <h1 className="font-display text-3xl md:text-4xl tracking-display mb-2">{product.name}</h1>
           <p className="text-lg tabular-nums text-muted-foreground mb-6">{formatPrice(product.price)}</p>
+          {outOfStock ? (
+            <p className="text-xs uppercase tracking-wide-caps text-destructive mb-4">Out of stock</p>
+          ) : lowStock ? (
+            <p className="text-xs uppercase tracking-wide-caps text-orange-600 mb-4">Only {product.stock} left</p>
+          ) : null}
           <p className="text-sm text-muted-foreground leading-relaxed mb-8 max-w-md">{product.description}</p>
 
           {/* Size selector */}
@@ -106,10 +114,10 @@ export default function ProductDetail() {
 
           <button
             onClick={handleAdd}
-            disabled={!selectedSize}
+            disabled={!selectedSize || outOfStock}
             className="w-full md:w-auto py-3.5 px-12 text-sm uppercase tracking-wide-caps font-medium rounded-sm btn-neumorph-dark text-primary-foreground active:scale-[0.98] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {selectedSize ? "Add to Bag" : "Select a Size"}
+            {outOfStock ? "Out of Stock" : selectedSize ? "Add to Bag" : "Select a Size"}
           </button>
 
           {/* Verified Authentic Badge — Thrift Only */}
