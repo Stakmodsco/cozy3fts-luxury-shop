@@ -469,18 +469,26 @@ export default function Admin() {
               <div className="grid grid-cols-2 gap-3">
                 <label className="block">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">ID</span>
-                  <input value={editing.id} onChange={(e) => setEditing({ ...editing, id: e.target.value })} className="w-full mt-1 bg-card border border-border rounded-md px-3 py-2 focus:outline-none focus:border-foreground/40" />
+                  <input value={editing.id} onChange={(e) => setEditing({ ...editing, id: e.target.value })} className={`w-full mt-1 bg-card border rounded-md px-3 py-2 focus:outline-none ${errors.id ? "border-destructive" : "border-border focus:border-foreground/40"}`} />
+                  {errors.id && <p className="text-xs text-destructive mt-1">{errors.id}</p>}
                 </label>
                 <label className="block">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">Name</span>
-                  <input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className="w-full mt-1 bg-card border border-border rounded-md px-3 py-2 focus:outline-none focus:border-foreground/40" />
+                  <input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className={`w-full mt-1 bg-card border rounded-md px-3 py-2 focus:outline-none ${errors.name ? "border-destructive" : "border-border focus:border-foreground/40"}`} />
+                  {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
                 </label>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <label className="block">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">Price (KSh)</span>
-                  <input type="number" value={editing.price} onChange={(e) => setEditing({ ...editing, price: Number(e.target.value) })} className="w-full mt-1 bg-card border border-border rounded-md px-3 py-2 focus:outline-none focus:border-foreground/40" />
+                  <input type="number" min={0} value={editing.price} onChange={(e) => setEditing({ ...editing, price: Number(e.target.value) })} className={`w-full mt-1 bg-card border rounded-md px-3 py-2 focus:outline-none ${errors.price ? "border-destructive" : "border-border focus:border-foreground/40"}`} />
+                  {errors.price && <p className="text-xs text-destructive mt-1">{errors.price}</p>}
+                </label>
+                <label className="block">
+                  <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">Stock</span>
+                  <input type="number" min={0} step={1} value={editing.stock} onChange={(e) => setEditing({ ...editing, stock: Math.max(0, Math.floor(Number(e.target.value) || 0)) })} className={`w-full mt-1 bg-card border rounded-md px-3 py-2 focus:outline-none ${errors.stock ? "border-destructive" : "border-border focus:border-foreground/40"}`} />
+                  {errors.stock && <p className="text-xs text-destructive mt-1">{errors.stock}</p>}
                 </label>
                 <label className="block">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">Category</span>
@@ -491,6 +499,22 @@ export default function Admin() {
                     <option value="thrift">Thrift</option>
                   </select>
                 </label>
+              </div>
+
+              <div className="flex items-center justify-between bg-card/60 border border-border rounded-md px-3 py-2.5">
+                <div>
+                  <p className="text-sm font-medium">{editing.published ? "Published" : "Draft"}</p>
+                  <p className="text-xs text-muted-foreground">{editing.published ? "Visible on the storefront" : "Hidden from shoppers"}</p>
+                </div>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={editing.published}
+                  onClick={() => setEditing({ ...editing, published: !editing.published })}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${editing.published ? "bg-foreground" : "bg-muted"}`}
+                >
+                  <span className={`inline-block h-5 w-5 transform rounded-full bg-background transition-transform ${editing.published ? "translate-x-5" : "translate-x-0.5"}`} />
+                </button>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
@@ -526,28 +550,61 @@ export default function Admin() {
                 <input
                   value={editing.sizes.join(", ")}
                   onChange={(e) => setEditing({ ...editing, sizes: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })}
-                  className="w-full mt-1 bg-card border border-border rounded-md px-3 py-2 focus:outline-none focus:border-foreground/40"
+                  className={`w-full mt-1 bg-card border rounded-md px-3 py-2 focus:outline-none ${errors.sizes ? "border-destructive" : "border-border focus:border-foreground/40"}`}
                   placeholder="S, M, L, XL"
                 />
+                {errors.sizes && <p className="text-xs text-destructive mt-1">{errors.sizes}</p>}
               </label>
 
               <label className="block">
                 <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">Description</span>
-                <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} rows={3} className="w-full mt-1 bg-card border border-border rounded-md px-3 py-2 focus:outline-none focus:border-foreground/40" />
+                <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} rows={3} className={`w-full mt-1 bg-card border rounded-md px-3 py-2 focus:outline-none ${errors.description ? "border-destructive" : "border-border focus:border-foreground/40"}`} />
+                <p className="text-[10px] text-muted-foreground mt-1">{editing.description.length}/2000</p>
+                {errors.description && <p className="text-xs text-destructive mt-1">{errors.description}</p>}
               </label>
 
               <div>
                 <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">Image</span>
-                <div className="mt-1 flex items-center gap-3">
-                  {editing.image_url && (
-                    <img src={editing.image_url} alt="" className="w-20 h-20 object-cover rounded-md border border-border" />
+                <div
+                  onDragOver={(e) => { e.preventDefault(); }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const file = e.dataTransfer.files?.[0];
+                    if (file) handleImageUpload(file);
+                  }}
+                  className={`mt-1 flex items-center gap-4 p-3 rounded-md border-2 border-dashed ${errors.image_url ? "border-destructive" : "border-border"} bg-card/40`}
+                >
+                  {editing.image_url ? (
+                    <div className="relative">
+                      <img src={editing.image_url} alt="Preview" className="w-32 h-32 object-cover rounded-md border border-border" />
+                      <button
+                        type="button"
+                        onClick={() => setEditing({ ...editing, image_url: "" })}
+                        className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:text-destructive shadow-sm"
+                        aria-label="Remove image"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-32 h-32 rounded-md bg-muted flex items-center justify-center text-muted-foreground">
+                      <Upload className="w-6 h-6" />
+                    </div>
                   )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])}
-                    className="text-xs"
-                  />
+                  <div className="flex-1 text-xs text-muted-foreground">
+                    <label className="inline-flex items-center gap-1.5 cursor-pointer text-foreground underline">
+                      <Upload className="w-3 h-3" />
+                      {uploading ? "Uploading..." : editing.image_url ? "Replace image" : "Choose file"}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        disabled={uploading}
+                        onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])}
+                        className="hidden"
+                      />
+                    </label>
+                    <p className="mt-1">or drag &amp; drop here. PNG/JPG up to 5MB.</p>
+                  </div>
                 </div>
                 <input
                   value={editing.image_url}
@@ -555,14 +612,15 @@ export default function Admin() {
                   placeholder="Or paste image URL"
                   className="w-full mt-2 bg-card border border-border rounded-md px-3 py-2 focus:outline-none focus:border-foreground/40 text-xs"
                 />
+                {errors.image_url && <p className="text-xs text-destructive mt-1">{errors.image_url}</p>}
               </div>
 
               <div className="flex justify-end gap-2 pt-4">
-                <button onClick={() => setEditing(null)} disabled={saving} className="text-xs uppercase tracking-wide-caps btn-neumorph px-5 py-2.5 rounded-lg">
+                <button onClick={() => { setEditing(null); setErrors({}); }} disabled={saving} className="text-xs uppercase tracking-wide-caps btn-neumorph px-5 py-2.5 rounded-lg">
                   Cancel
                 </button>
-                <button onClick={handleSaveProduct} disabled={saving} className="text-xs uppercase tracking-wide-caps btn-neumorph-dark text-primary-foreground px-5 py-2.5 rounded-lg disabled:opacity-50">
-                  {saving ? "Saving..." : "Save"}
+                <button onClick={handleSaveProduct} disabled={saving || uploading} className="text-xs uppercase tracking-wide-caps btn-neumorph-dark text-primary-foreground px-5 py-2.5 rounded-lg disabled:opacity-50">
+                  {saving ? "Saving..." : editing.published ? "Save & Publish" : "Save Draft"}
                 </button>
               </div>
             </div>
