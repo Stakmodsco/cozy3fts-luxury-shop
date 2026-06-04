@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Mail, ShoppingCart, Package, Plus, Pencil, Trash2, X } from "lucide-react";
+import { Mail, ShoppingCart, Package, Plus, Pencil, Trash2, X, GripVertical, Eye, EyeOff, Upload } from "lucide-react";
 
 const ADMIN_PASSWORD = "cozy3fts2025";
 const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-products`;
@@ -38,6 +38,9 @@ interface ProductRow {
   image_url: string;
   image_alt: string | null;
   description: string;
+  published: boolean;
+  stock: number;
+  display_order: number;
 }
 
 const emptyProduct: ProductRow = {
@@ -52,6 +55,9 @@ const emptyProduct: ProductRow = {
   image_url: "",
   image_alt: null,
   description: "",
+  published: true,
+  stock: 10,
+  display_order: 0,
 };
 
 export default function Admin() {
@@ -64,6 +70,10 @@ export default function Admin() {
   const [editing, setEditing] = useState<ProductRow | null>(null);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,7 +111,8 @@ export default function Admin() {
         const { data } = await supabase
           .from("products")
           .select("*")
-          .order("created_at", { ascending: false });
+          .order("display_order", { ascending: true })
+          .order("created_at", { ascending: true });
         setProducts((data as ProductRow[]) || []);
       }
     } catch {
@@ -137,6 +148,15 @@ export default function Admin() {
     });
 
   const handleImageUpload = async (file: File) => {
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be under 5MB");
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      toast.error("File must be an image");
+      return;
+    }
+    setUploading(true);
     try {
       const base64 = await fileToBase64(file);
       const data = await callAdminFn({
@@ -148,12 +168,29 @@ export default function Admin() {
     } catch (err) {
       toast.error((err as Error).message);
     }
+    setUploading(false);
+  };
+
+  const validateProduct = (p: ProductRow): Record<string, string> => {
+    const errs: Record<string, string> = {};
+    if (!p.id.trim()) errs.id = "ID is required";
+    else if (!/^[a-z0-9-]+$/i.test(p.id)) errs.id = "Use letters, numbers, and dashes only";
+    if (!p.name.trim()) errs.name = "Name is required";
+    else if (p.name.length > 120) errs.name = "Name too long";
+    if (!p.image_url.trim()) errs.image_url = "Image is required";
+    if (!Number.isFinite(p.price) || p.price <= 0) errs.price = "Price must be positive";
+    if (!Number.isInteger(p.stock) || p.stock < 0) errs.stock = "Stock must be 0 or more";
+    if (!p.sizes.length) errs.sizes = "Add at least one size";
+    if (p.description.length > 2000) errs.description = "Description too long";
+    return errs;
   };
 
   const handleSaveProduct = async () => {
     if (!editing) return;
-    if (!editing.name || !editing.image_url || !editing.id) {
-      toast.error("ID, name and image are required.");
+    const errs = validateProduct(editing);
+    setErrors(errs);
+    if (Object.keys(errs).length) {
+      toast.error("Please fix the highlighted fields.");
       return;
     }
     setSaving(true);
@@ -171,9 +208,12 @@ export default function Admin() {
         image_url: editing.image_url,
         image_alt: editing.image_alt || null,
         description: editing.description,
+        published: editing.published,
+        stock: editing.stock,
       };
       if (isNew) {
-        await callAdminFn({ action: "create", product: payload });
+        const nextOrder = ((products[products.length - 1]?.display_order) || 0) + 10;
+        await callAdminFn({ action: "create", product: { ...payload, display_order: nextOrder } });
         toast.success("Product created");
       } else {
         const { id, ...rest } = payload;
@@ -181,11 +221,48 @@ export default function Admin() {
         toast.success("Product updated");
       }
       setEditing(null);
+      setErrors({});
       fetchData();
     } catch (err) {
       toast.error((err as Error).message);
     }
     setSaving(false);
+  };
+
+  const togglePublish = async (p: ProductRow) => {
+    try {
+      await callAdminFn({ action: "update", id: p.id, product: { published: !p.published } });
+      setProducts((prev) => prev.map((x) => (x.id === p.id ? { ...x, published: !p.published } : x)));
+      toast.success(!p.published ? "Published" : "Moved to drafts");
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
+  };
+
+  const onDragStart = (id: string) => setDragId(id);
+  const onDragOver = (e: React.DragEvent, id: string) => {
+    e.preventDefault();
+    if (id !== dragOverId) setDragOverId(id);
+  };
+  const onDrop = async (targetId: string) => {
+    const sourceId = dragId;
+    setDragId(null);
+    setDragOverId(null);
+    if (!sourceId || sourceId === targetId) return;
+    const fromIdx = products.findIndex((p) => p.id === sourceId);
+    const toIdx = products.findIndex((p) => p.id === targetId);
+    if (fromIdx === -1 || toIdx === -1) return;
+    const reordered = [...products];
+    const [moved] = reordered.splice(fromIdx, 1);
+    reordered.splice(toIdx, 0, moved);
+    setProducts(reordered);
+    try {
+      await callAdminFn({ action: "reorder", order: reordered.map((p) => p.id) });
+      toast.success("Order updated");
+    } catch (err) {
+      toast.error((err as Error).message);
+      fetchData();
+    }
   };
 
   const handleDeleteProduct = async (id: string) => {
@@ -270,17 +347,52 @@ export default function Admin() {
             <p className="text-muted-foreground text-sm py-12 text-center col-span-full">No products yet.</p>
           ) : (
             products.map((p) => (
-              <div key={p.id} className="btn-neumorph p-3 rounded-xl cursor-default">
+              <div
+                key={p.id}
+                draggable
+                onDragStart={() => onDragStart(p.id)}
+                onDragOver={(e) => onDragOver(e, p.id)}
+                onDragLeave={() => setDragOverId((cur) => (cur === p.id ? null : cur))}
+                onDrop={() => onDrop(p.id)}
+                onDragEnd={() => { setDragId(null); setDragOverId(null); }}
+                className={`btn-neumorph p-3 rounded-xl cursor-default transition-all ${
+                  dragOverId === p.id ? "ring-2 ring-foreground/40 scale-[1.01]" : ""
+                } ${dragId === p.id ? "opacity-50" : ""} ${!p.published ? "opacity-70" : ""}`}
+              >
+                <div className="flex items-start gap-2 mb-2">
+                  <button
+                    type="button"
+                    className="text-muted-foreground hover:text-foreground cursor-grab active:cursor-grabbing"
+                    aria-label="Drag to reorder"
+                  >
+                    <GripVertical className="w-4 h-4" />
+                  </button>
+                  <div className="flex-1 flex flex-wrap gap-1.5 justify-end">
+                    {!p.published && (
+                      <span className="text-[10px] uppercase tracking-wide-caps bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 px-2 py-0.5 rounded-full">Draft</span>
+                    )}
+                    {p.stock === 0 ? (
+                      <span className="text-[10px] uppercase tracking-wide-caps bg-destructive/15 text-destructive px-2 py-0.5 rounded-full">Out of stock</span>
+                    ) : p.stock <= 3 ? (
+                      <span className="text-[10px] uppercase tracking-wide-caps bg-orange-500/15 text-orange-600 px-2 py-0.5 rounded-full">Low: {p.stock}</span>
+                    ) : (
+                      <span className="text-[10px] uppercase tracking-wide-caps bg-muted text-muted-foreground px-2 py-0.5 rounded-full">{p.stock} in stock</span>
+                    )}
+                  </div>
+                </div>
                 <div className="aspect-square w-full overflow-hidden rounded-lg bg-muted mb-3">
-                  <img src={p.image_url} alt={p.image_alt || p.name} className="w-full h-full object-cover" />
+                  <img src={p.image_url} alt={p.image_alt || p.name} className="w-full h-full object-cover" draggable={false} />
                 </div>
                 <p className="font-medium text-sm truncate">{p.name}</p>
                 <p className="text-xs text-muted-foreground mb-3">KSh {p.price.toLocaleString()} · {p.category}</p>
                 <div className="flex gap-2">
-                  <button onClick={() => setEditing(p)} className="flex-1 inline-flex items-center justify-center gap-1 text-xs btn-neumorph px-3 py-2 rounded-md">
+                  <button onClick={() => togglePublish(p)} className="inline-flex items-center justify-center text-xs btn-neumorph px-3 py-2 rounded-md" aria-label={p.published ? "Unpublish" : "Publish"} title={p.published ? "Unpublish" : "Publish"}>
+                    {p.published ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                  </button>
+                  <button onClick={() => { setErrors({}); setEditing(p); }} className="flex-1 inline-flex items-center justify-center gap-1 text-xs btn-neumorph px-3 py-2 rounded-md">
                     <Pencil className="w-3 h-3" /> Edit
                   </button>
-                  <button onClick={() => handleDeleteProduct(p.id)} className="inline-flex items-center justify-center text-xs btn-neumorph px-3 py-2 rounded-md text-destructive">
+                  <button onClick={() => handleDeleteProduct(p.id)} className="inline-flex items-center justify-center text-xs btn-neumorph px-3 py-2 rounded-md text-destructive" aria-label="Delete product">
                     <Trash2 className="w-3 h-3" />
                   </button>
                 </div>
@@ -357,18 +469,26 @@ export default function Admin() {
               <div className="grid grid-cols-2 gap-3">
                 <label className="block">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">ID</span>
-                  <input value={editing.id} onChange={(e) => setEditing({ ...editing, id: e.target.value })} className="w-full mt-1 bg-card border border-border rounded-md px-3 py-2 focus:outline-none focus:border-foreground/40" />
+                  <input value={editing.id} onChange={(e) => setEditing({ ...editing, id: e.target.value })} className={`w-full mt-1 bg-card border rounded-md px-3 py-2 focus:outline-none ${errors.id ? "border-destructive" : "border-border focus:border-foreground/40"}`} />
+                  {errors.id && <p className="text-xs text-destructive mt-1">{errors.id}</p>}
                 </label>
                 <label className="block">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">Name</span>
-                  <input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className="w-full mt-1 bg-card border border-border rounded-md px-3 py-2 focus:outline-none focus:border-foreground/40" />
+                  <input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className={`w-full mt-1 bg-card border rounded-md px-3 py-2 focus:outline-none ${errors.name ? "border-destructive" : "border-border focus:border-foreground/40"}`} />
+                  {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
                 </label>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <label className="block">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">Price (KSh)</span>
-                  <input type="number" value={editing.price} onChange={(e) => setEditing({ ...editing, price: Number(e.target.value) })} className="w-full mt-1 bg-card border border-border rounded-md px-3 py-2 focus:outline-none focus:border-foreground/40" />
+                  <input type="number" min={0} value={editing.price} onChange={(e) => setEditing({ ...editing, price: Number(e.target.value) })} className={`w-full mt-1 bg-card border rounded-md px-3 py-2 focus:outline-none ${errors.price ? "border-destructive" : "border-border focus:border-foreground/40"}`} />
+                  {errors.price && <p className="text-xs text-destructive mt-1">{errors.price}</p>}
+                </label>
+                <label className="block">
+                  <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">Stock</span>
+                  <input type="number" min={0} step={1} value={editing.stock} onChange={(e) => setEditing({ ...editing, stock: Math.max(0, Math.floor(Number(e.target.value) || 0)) })} className={`w-full mt-1 bg-card border rounded-md px-3 py-2 focus:outline-none ${errors.stock ? "border-destructive" : "border-border focus:border-foreground/40"}`} />
+                  {errors.stock && <p className="text-xs text-destructive mt-1">{errors.stock}</p>}
                 </label>
                 <label className="block">
                   <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">Category</span>
@@ -379,6 +499,22 @@ export default function Admin() {
                     <option value="thrift">Thrift</option>
                   </select>
                 </label>
+              </div>
+
+              <div className="flex items-center justify-between bg-card/60 border border-border rounded-md px-3 py-2.5">
+                <div>
+                  <p className="text-sm font-medium">{editing.published ? "Published" : "Draft"}</p>
+                  <p className="text-xs text-muted-foreground">{editing.published ? "Visible on the storefront" : "Hidden from shoppers"}</p>
+                </div>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={editing.published}
+                  onClick={() => setEditing({ ...editing, published: !editing.published })}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${editing.published ? "bg-foreground" : "bg-muted"}`}
+                >
+                  <span className={`inline-block h-5 w-5 transform rounded-full bg-background transition-transform ${editing.published ? "translate-x-5" : "translate-x-0.5"}`} />
+                </button>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
@@ -414,28 +550,61 @@ export default function Admin() {
                 <input
                   value={editing.sizes.join(", ")}
                   onChange={(e) => setEditing({ ...editing, sizes: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })}
-                  className="w-full mt-1 bg-card border border-border rounded-md px-3 py-2 focus:outline-none focus:border-foreground/40"
+                  className={`w-full mt-1 bg-card border rounded-md px-3 py-2 focus:outline-none ${errors.sizes ? "border-destructive" : "border-border focus:border-foreground/40"}`}
                   placeholder="S, M, L, XL"
                 />
+                {errors.sizes && <p className="text-xs text-destructive mt-1">{errors.sizes}</p>}
               </label>
 
               <label className="block">
                 <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">Description</span>
-                <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} rows={3} className="w-full mt-1 bg-card border border-border rounded-md px-3 py-2 focus:outline-none focus:border-foreground/40" />
+                <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} rows={3} className={`w-full mt-1 bg-card border rounded-md px-3 py-2 focus:outline-none ${errors.description ? "border-destructive" : "border-border focus:border-foreground/40"}`} />
+                <p className="text-[10px] text-muted-foreground mt-1">{editing.description.length}/2000</p>
+                {errors.description && <p className="text-xs text-destructive mt-1">{errors.description}</p>}
               </label>
 
               <div>
                 <span className="text-xs text-muted-foreground uppercase tracking-wide-caps">Image</span>
-                <div className="mt-1 flex items-center gap-3">
-                  {editing.image_url && (
-                    <img src={editing.image_url} alt="" className="w-20 h-20 object-cover rounded-md border border-border" />
+                <div
+                  onDragOver={(e) => { e.preventDefault(); }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const file = e.dataTransfer.files?.[0];
+                    if (file) handleImageUpload(file);
+                  }}
+                  className={`mt-1 flex items-center gap-4 p-3 rounded-md border-2 border-dashed ${errors.image_url ? "border-destructive" : "border-border"} bg-card/40`}
+                >
+                  {editing.image_url ? (
+                    <div className="relative">
+                      <img src={editing.image_url} alt="Preview" className="w-32 h-32 object-cover rounded-md border border-border" />
+                      <button
+                        type="button"
+                        onClick={() => setEditing({ ...editing, image_url: "" })}
+                        className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:text-destructive shadow-sm"
+                        aria-label="Remove image"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-32 h-32 rounded-md bg-muted flex items-center justify-center text-muted-foreground">
+                      <Upload className="w-6 h-6" />
+                    </div>
                   )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])}
-                    className="text-xs"
-                  />
+                  <div className="flex-1 text-xs text-muted-foreground">
+                    <label className="inline-flex items-center gap-1.5 cursor-pointer text-foreground underline">
+                      <Upload className="w-3 h-3" />
+                      {uploading ? "Uploading..." : editing.image_url ? "Replace image" : "Choose file"}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        disabled={uploading}
+                        onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])}
+                        className="hidden"
+                      />
+                    </label>
+                    <p className="mt-1">or drag &amp; drop here. PNG/JPG up to 5MB.</p>
+                  </div>
                 </div>
                 <input
                   value={editing.image_url}
@@ -443,14 +612,15 @@ export default function Admin() {
                   placeholder="Or paste image URL"
                   className="w-full mt-2 bg-card border border-border rounded-md px-3 py-2 focus:outline-none focus:border-foreground/40 text-xs"
                 />
+                {errors.image_url && <p className="text-xs text-destructive mt-1">{errors.image_url}</p>}
               </div>
 
               <div className="flex justify-end gap-2 pt-4">
-                <button onClick={() => setEditing(null)} disabled={saving} className="text-xs uppercase tracking-wide-caps btn-neumorph px-5 py-2.5 rounded-lg">
+                <button onClick={() => { setEditing(null); setErrors({}); }} disabled={saving} className="text-xs uppercase tracking-wide-caps btn-neumorph px-5 py-2.5 rounded-lg">
                   Cancel
                 </button>
-                <button onClick={handleSaveProduct} disabled={saving} className="text-xs uppercase tracking-wide-caps btn-neumorph-dark text-primary-foreground px-5 py-2.5 rounded-lg disabled:opacity-50">
-                  {saving ? "Saving..." : "Save"}
+                <button onClick={handleSaveProduct} disabled={saving || uploading} className="text-xs uppercase tracking-wide-caps btn-neumorph-dark text-primary-foreground px-5 py-2.5 rounded-lg disabled:opacity-50">
+                  {saving ? "Saving..." : editing.published ? "Save & Publish" : "Save Draft"}
                 </button>
               </div>
             </div>

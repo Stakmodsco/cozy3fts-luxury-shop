@@ -68,27 +68,63 @@ export default function HeroCarousel() {
   const [order, setOrder] = useState<number[]>(() => SLIDES.map((_, i) => i));
   const timer = useRef<number | null>(null);
   const paused = useRef(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   const next = () => setOrder((o) => [...o.slice(1), o[0]]);
   const prev = () => setOrder((o) => [o[o.length - 1], ...o.slice(0, -1)]);
 
   useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReducedMotion(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (reducedMotion) return;
     const tick = () => {
-      if (!paused.current) next();
+      if (!paused.current && !document.hidden) next();
     };
     timer.current = window.setInterval(tick, AUTOPLAY_MS);
     return () => {
       if (timer.current) window.clearInterval(timer.current);
     };
-  }, []);
+  }, [reducedMotion]);
+
+  // Keyboard navigation when carousel has focus
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      next();
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      prev();
+    }
+  };
+
+  const activeSlide = SLIDES[order[1]];
 
   return (
     <section
-      className="hero-carousel relative w-full h-screen min-h-[600px] overflow-hidden"
+      ref={sectionRef}
+      className="hero-carousel relative w-full h-dvh min-h-[600px] overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/60"
       onMouseEnter={() => (paused.current = true)}
       onMouseLeave={() => (paused.current = false)}
+      onFocus={() => (paused.current = true)}
+      onBlur={() => (paused.current = false)}
+      onKeyDown={onKeyDown}
+      tabIndex={0}
       aria-roledescription="carousel"
+      aria-label="Featured collections"
+      role="region"
     >
+      {/* Screen-reader live region announces current slide */}
+      <p className="sr-only" aria-live="polite" aria-atomic="true">
+        Slide {order[1] + 1} of {SLIDES.length}: {activeSlide.title}. {activeSlide.description}
+      </p>
+
       <ul className="hc-slider">
         {order.map((idx, position) => {
           const slide = SLIDES[idx];
@@ -99,6 +135,9 @@ export default function HeroCarousel() {
               className="hc-item"
               style={{ backgroundImage: `url(${slide.image})` }}
               aria-hidden={!isActive}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${order.indexOf(idx) + 1} of ${SLIDES.length}: ${slide.title}`}
             >
               {isActive && (
                 <div className="hc-content">
@@ -117,17 +156,33 @@ export default function HeroCarousel() {
       </ul>
 
       <nav className="hc-nav" aria-label="Carousel navigation">
-        <button className="hc-btn" onClick={prev} aria-label="Previous slide">
+        <button type="button" className="hc-btn" onClick={prev} aria-label="Previous slide">
           <ArrowLeft className="w-4 h-4" />
         </button>
-        <button className="hc-btn" onClick={next} aria-label="Next slide">
+        <button type="button" className="hc-btn" onClick={next} aria-label="Next slide">
           <ArrowRight className="w-4 h-4" />
         </button>
       </nav>
 
-      <div className="hc-dots" aria-hidden="true">
-        {SLIDES.map((_, i) => (
-          <span key={i} className={`hc-dot ${i === order[1] ? "is-active" : ""}`} />
+      <div className="hc-dots" role="tablist" aria-label="Slide selector">
+        {SLIDES.map((slide, i) => (
+          <button
+            key={i}
+            type="button"
+            role="tab"
+            aria-selected={i === order[1]}
+            aria-label={`Go to slide ${i + 1}: ${slide.title}`}
+            className={`hc-dot ${i === order[1] ? "is-active" : ""}`}
+            onClick={() => {
+              // Rotate so chosen idx becomes the active (index 1) position
+              setOrder((o) => {
+                const pos = o.indexOf(i);
+                if (pos === -1) return o;
+                const shift = (pos - 1 + o.length) % o.length;
+                return [...o.slice(shift), ...o.slice(0, shift)];
+              });
+            }}
+          />
         ))}
       </div>
     </section>

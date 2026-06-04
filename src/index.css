@@ -490,10 +490,17 @@
   z-index: 5;
 }
 .hc-dot {
-  width: 24px; height: 2px; background: rgba(255,255,255,0.4); border-radius: 2px;
+  width: 24px; height: 8px; padding: 0; border: 0; background: rgba(255,255,255,0.4); border-radius: 4px;
+  display: inline-block; cursor: pointer;
   transition: background 0.3s ease, width 0.3s ease;
 }
 .hc-dot.is-active { background: rgba(255,255,255,1); width: 40px; }
+.hc-dot:focus-visible { outline: 2px solid rgba(255,255,255,0.9); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hc-item { transition: none !important; }
+  .hc-content { animation: none !important; }
+}
 
 @media (max-width: 900px) {
   .hc-item { width: 140px; height: 220px; }

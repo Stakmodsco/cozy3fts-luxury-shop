@@ -30,11 +30,12 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { action, product, id, image } = body as {
-      action: "create" | "update" | "delete" | "upload";
+    const { action, product, id, image, order } = body as {
+      action: "create" | "update" | "delete" | "upload" | "reorder";
       product?: Record<string, unknown>;
       id?: string;
       image?: { base64: string; filename: string; contentType: string };
+      order?: string[];
     };
 
     if (action === "upload") {
@@ -73,6 +74,22 @@ Deno.serve(async (req) => {
       if (!id) return json({ error: "Missing id" }, 400);
       const { error } = await supabase.from("products").delete().eq("id", id);
       if (error) return json({ error: error.message }, 500);
+      return json({ ok: true });
+    }
+
+    if (action === "reorder") {
+      if (!order || !Array.isArray(order)) return json({ error: "Missing order" }, 400);
+      // Assign display_order values in steps of 10 based on array index.
+      const results = await Promise.all(
+        order.map((pid, idx) =>
+          supabase
+            .from("products")
+            .update({ display_order: (idx + 1) * 10, updated_at: new Date().toISOString() })
+            .eq("id", pid)
+        )
+      );
+      const errs = results.map((r) => r.error).filter(Boolean);
+      if (errs.length) return json({ error: errs[0]!.message }, 500);
       return json({ ok: true });
     }
 

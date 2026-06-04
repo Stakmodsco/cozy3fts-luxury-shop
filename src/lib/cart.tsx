@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { Product } from "./products";
+import { toast } from "sonner";
 
 export interface CartItem {
   product: Product;
@@ -26,8 +27,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const addItem = (product: Product, size: string) => {
+    const stock = product.stock ?? Infinity;
+    if (stock <= 0) {
+      toast.error("This item is out of stock");
+      return;
+    }
     setItems((prev) => {
       const existing = prev.find((i) => i.product.id === product.id && i.size === size);
+      const currentQty = existing?.quantity ?? 0;
+      if (currentQty + 1 > stock) {
+        toast.error(`Only ${stock} in stock`);
+        return prev;
+      }
       if (existing) {
         return prev.map((i) =>
           i.product.id === product.id && i.size === size
@@ -47,9 +58,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const updateQuantity = (productId: string, size: string, qty: number) => {
     if (qty <= 0) return removeItem(productId, size);
     setItems((prev) =>
-      prev.map((i) =>
-        i.product.id === productId && i.size === size ? { ...i, quantity: qty } : i
-      )
+      prev.map((i) => {
+        if (i.product.id !== productId || i.size !== size) return i;
+        const max = i.product.stock ?? Infinity;
+        const next = Math.min(qty, max);
+        if (qty > max) toast.error(`Only ${max} in stock`);
+        return { ...i, quantity: next };
+      })
     );
   };
 
