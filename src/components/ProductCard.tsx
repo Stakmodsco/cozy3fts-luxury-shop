@@ -9,6 +9,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const { toggleItem, isInWishlist } = useWishlist();
   const wishlisted = isInWishlist(product.id);
   const [animateHeart, setAnimateHeart] = useState(false);
+  const outOfStock = (product.stock ?? 0) <= 0;
 
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -25,6 +26,11 @@ export default function ProductCard({ product }: { product: Product }) {
            <ProductImage src={product.image} alt={product.name} className="protected-image transition-transform duration-700 ease-out group-hover:scale-105" />
           {/* Hover overlay */}
           <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/5 transition-colors duration-500" />
+          {outOfStock && (
+            <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px] flex items-center justify-center">
+              <span className="text-[10px] uppercase tracking-wide-caps bg-foreground text-primary-foreground px-3 py-1 rounded-sm">Out of Stock</span>
+            </div>
+          )}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">
             {product.tag && (
               <span className="text-[10px] uppercase tracking-wide-caps bg-foreground text-primary-foreground px-2.5 py-1 rounded-sm font-body">
