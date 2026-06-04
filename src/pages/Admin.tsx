@@ -347,17 +347,52 @@ export default function Admin() {
             <p className="text-muted-foreground text-sm py-12 text-center col-span-full">No products yet.</p>
           ) : (
             products.map((p) => (
-              <div key={p.id} className="btn-neumorph p-3 rounded-xl cursor-default">
+              <div
+                key={p.id}
+                draggable
+                onDragStart={() => onDragStart(p.id)}
+                onDragOver={(e) => onDragOver(e, p.id)}
+                onDragLeave={() => setDragOverId((cur) => (cur === p.id ? null : cur))}
+                onDrop={() => onDrop(p.id)}
+                onDragEnd={() => { setDragId(null); setDragOverId(null); }}
+                className={`btn-neumorph p-3 rounded-xl cursor-default transition-all ${
+                  dragOverId === p.id ? "ring-2 ring-foreground/40 scale-[1.01]" : ""
+                } ${dragId === p.id ? "opacity-50" : ""} ${!p.published ? "opacity-70" : ""}`}
+              >
+                <div className="flex items-start gap-2 mb-2">
+                  <button
+                    type="button"
+                    className="text-muted-foreground hover:text-foreground cursor-grab active:cursor-grabbing"
+                    aria-label="Drag to reorder"
+                  >
+                    <GripVertical className="w-4 h-4" />
+                  </button>
+                  <div className="flex-1 flex flex-wrap gap-1.5 justify-end">
+                    {!p.published && (
+                      <span className="text-[10px] uppercase tracking-wide-caps bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 px-2 py-0.5 rounded-full">Draft</span>
+                    )}
+                    {p.stock === 0 ? (
+                      <span className="text-[10px] uppercase tracking-wide-caps bg-destructive/15 text-destructive px-2 py-0.5 rounded-full">Out of stock</span>
+                    ) : p.stock <= 3 ? (
+                      <span className="text-[10px] uppercase tracking-wide-caps bg-orange-500/15 text-orange-600 px-2 py-0.5 rounded-full">Low: {p.stock}</span>
+                    ) : (
+                      <span className="text-[10px] uppercase tracking-wide-caps bg-muted text-muted-foreground px-2 py-0.5 rounded-full">{p.stock} in stock</span>
+                    )}
+                  </div>
+                </div>
                 <div className="aspect-square w-full overflow-hidden rounded-lg bg-muted mb-3">
-                  <img src={p.image_url} alt={p.image_alt || p.name} className="w-full h-full object-cover" />
+                  <img src={p.image_url} alt={p.image_alt || p.name} className="w-full h-full object-cover" draggable={false} />
                 </div>
                 <p className="font-medium text-sm truncate">{p.name}</p>
                 <p className="text-xs text-muted-foreground mb-3">KSh {p.price.toLocaleString()} · {p.category}</p>
                 <div className="flex gap-2">
-                  <button onClick={() => setEditing(p)} className="flex-1 inline-flex items-center justify-center gap-1 text-xs btn-neumorph px-3 py-2 rounded-md">
+                  <button onClick={() => togglePublish(p)} className="inline-flex items-center justify-center text-xs btn-neumorph px-3 py-2 rounded-md" aria-label={p.published ? "Unpublish" : "Publish"} title={p.published ? "Unpublish" : "Publish"}>
+                    {p.published ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                  </button>
+                  <button onClick={() => { setErrors({}); setEditing(p); }} className="flex-1 inline-flex items-center justify-center gap-1 text-xs btn-neumorph px-3 py-2 rounded-md">
                     <Pencil className="w-3 h-3" /> Edit
                   </button>
-                  <button onClick={() => handleDeleteProduct(p.id)} className="inline-flex items-center justify-center text-xs btn-neumorph px-3 py-2 rounded-md text-destructive">
+                  <button onClick={() => handleDeleteProduct(p.id)} className="inline-flex items-center justify-center text-xs btn-neumorph px-3 py-2 rounded-md text-destructive" aria-label="Delete product">
                     <Trash2 className="w-3 h-3" />
                   </button>
                 </div>
