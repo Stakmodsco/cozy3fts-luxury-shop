@@ -10,6 +10,9 @@ export interface Product {
   image: string;
   imageAlt?: string;
   description: string;
+  stock?: number;
+  published?: boolean;
+  displayOrder?: number;
 }
 
 export function formatPrice(price: number): string {
