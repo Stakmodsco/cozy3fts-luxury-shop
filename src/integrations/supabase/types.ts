@@ -124,13 +124,16 @@ export type Database = {
           category: string
           created_at: string
           description: string
+          display_order: number
           id: string
           image_alt: string | null
           image_url: string
           name: string
           price: number
+          published: boolean
           sizes: string[]
           source_tag: string | null
+          stock: number
           tag: string | null
           thrift_category: string | null
           updated_at: string
@@ -139,13 +142,16 @@ export type Database = {
           category: string
           created_at?: string
           description?: string
+          display_order?: number
           id: string
           image_alt?: string | null
           image_url: string
           name: string
           price: number
+          published?: boolean
           sizes?: string[]
           source_tag?: string | null
+          stock?: number
           tag?: string | null
           thrift_category?: string | null
           updated_at?: string
@@ -154,13 +160,16 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string
+          display_order?: number
           id?: string
           image_alt?: string | null
           image_url?: string
           name?: string
           price?: number
+          published?: boolean
           sizes?: string[]
           source_tag?: string | null
+          stock?: number
           tag?: string | null
           thrift_category?: string | null
           updated_at?: string
