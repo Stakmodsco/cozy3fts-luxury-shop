@@ -59,7 +59,7 @@ export default function Thrift() {
         <>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {thriftProducts.map((product, i) => (
-              <div key={product.id} className="reveal" style={{ transitionDelay: `${i * 60}ms` }}>
+              <div key={product.id} className="reveal visible" style={{ transitionDelay: `${i * 60}ms` }}>
                 <ProductCard product={product} />
               </div>
             ))}
