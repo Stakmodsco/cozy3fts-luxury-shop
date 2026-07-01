@@ -61,7 +61,10 @@ const SLIDES: Slide[] = [
   },
 ];
 
-const AUTOPLAY_MS = 5000;
+const AUTOPLAY_DESKTOP_MS = 5000;
+const AUTOPLAY_MOBILE_MS = 4200;
+const SWIPE_THRESHOLD = 45; // px
+const SWIPE_VELOCITY = 0.35; // px/ms for momentum flick
 
 export default function HeroCarousel() {
   // Order is rotated; index 1 (second item) is the active/foreground one per the CSS pattern.
@@ -70,6 +73,7 @@ export default function HeroCarousel() {
   const paused = useRef(false);
   const sectionRef = useRef<HTMLElement | null>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const next = () => setOrder((o) => [...o.slice(1), o[0]]);
   const prev = () => setOrder((o) => [o[o.length - 1], ...o.slice(0, -1)]);
@@ -83,15 +87,24 @@ export default function HeroCarousel() {
   }, []);
 
   useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+
+  useEffect(() => {
     if (reducedMotion) return;
     const tick = () => {
       if (!paused.current && !document.hidden) next();
     };
-    timer.current = window.setInterval(tick, AUTOPLAY_MS);
+    const interval = isMobile ? AUTOPLAY_MOBILE_MS : AUTOPLAY_DESKTOP_MS;
+    timer.current = window.setInterval(tick, interval);
     return () => {
       if (timer.current) window.clearInterval(timer.current);
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, isMobile]);
 
   // Keyboard navigation when carousel has focus
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -101,6 +114,64 @@ export default function HeroCarousel() {
     } else if (e.key === "ArrowLeft") {
       e.preventDefault();
       prev();
+    }
+  };
+
+  // Touch swipe with momentum for mobile
+  const touchState = useRef<{
+    startX: number;
+    startY: number;
+    startT: number;
+    lastX: number;
+    lastT: number;
+    active: boolean;
+    axisLocked: null | "x" | "y";
+  }>({ startX: 0, startY: 0, startT: 0, lastX: 0, lastT: 0, active: false, axisLocked: null });
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchState.current = {
+      startX: t.clientX,
+      startY: t.clientY,
+      startT: performance.now(),
+      lastX: t.clientX,
+      lastT: performance.now(),
+      active: true,
+      axisLocked: null,
+    };
+    paused.current = true;
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!touchState.current.active) return;
+    const t = e.touches[0];
+    const dx = t.clientX - touchState.current.startX;
+    const dy = t.clientY - touchState.current.startY;
+    if (!touchState.current.axisLocked) {
+      if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+        touchState.current.axisLocked = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      }
+    }
+    if (touchState.current.axisLocked === "x") {
+      // Prevent vertical scroll conflict when clearly a horizontal swipe
+      if (e.cancelable) e.preventDefault();
+      touchState.current.lastX = t.clientX;
+      touchState.current.lastT = performance.now();
+    }
+  };
+
+  const onTouchEnd = () => {
+    const s = touchState.current;
+    if (!s.active) return;
+    s.active = false;
+    paused.current = false;
+    if (s.axisLocked !== "x") return;
+    const dx = s.lastX - s.startX;
+    const dt = Math.max(1, s.lastT - s.startT);
+    const velocity = Math.abs(dx) / dt;
+    if (Math.abs(dx) > SWIPE_THRESHOLD || velocity > SWIPE_VELOCITY) {
+      if (dx < 0) next();
+      else prev();
     }
   };
 
@@ -115,7 +186,12 @@ export default function HeroCarousel() {
       onFocus={() => (paused.current = true)}
       onBlur={() => (paused.current = false)}
       onKeyDown={onKeyDown}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+      onTouchCancel={onTouchEnd}
       tabIndex={0}
+      style={{ touchAction: "pan-y" }}
       aria-roledescription="carousel"
       aria-label="Featured collections"
       role="region"
