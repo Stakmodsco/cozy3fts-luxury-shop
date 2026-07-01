@@ -13,8 +13,8 @@ import Carousel3D from "@/components/Carousel3D";
 import HeroCarousel from "@/components/HeroCarousel";
 
 export default function Index() {
-  const revealRef = useReveal();
   const { products } = useProducts();
+  const revealRef = useReveal([products.length]);
 
   const bestsellers = products.filter((p) => p.tag === "bestseller" || p.tag === "new").slice(0, 4);
 

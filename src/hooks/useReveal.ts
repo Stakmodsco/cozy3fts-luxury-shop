@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export function useReveal() {
+export function useReveal(deps: unknown[] = []) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -22,7 +22,8 @@ export function useReveal() {
     children.forEach((child) => observer.observe(child));
 
     return () => observer.disconnect();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
 
   return ref;
 }

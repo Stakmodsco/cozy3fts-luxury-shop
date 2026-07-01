@@ -10,9 +10,9 @@ const sourceFilters = [
 ];
 
 export default function NewArrivals() {
-  const [activeSource, setActiveSource] = useState("all");
-  const revealRef = useReveal();
   const { products, loading } = useProducts();
+  const [activeSource, setActiveSource] = useState("all");
+  const revealRef = useReveal([products.length, activeSource]);
 
   const newProducts = useMemo(() => {
     const base = products.filter((p) => p.tag === "new");
