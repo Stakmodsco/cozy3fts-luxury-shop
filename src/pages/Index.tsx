@@ -13,8 +13,8 @@ import Carousel3D from "@/components/Carousel3D";
 import HeroCarousel from "@/components/HeroCarousel";
 
 export default function Index() {
-  const { products } = useProducts();
-  const revealRef = useReveal([products.length]);
+  const { products, loading } = useProducts();
+  const revealRef = useReveal([products.length, loading]);
 
   const bestsellers = products.filter((p) => p.tag === "bestseller" || p.tag === "new").slice(0, 4);
 
@@ -76,11 +76,19 @@ export default function Index() {
           </Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {bestsellers.map((product, i) => (
-            <div key={product.id} className="reveal" style={{ transitionDelay: `${i * 80}ms` }}>
-              <ProductCard product={product} />
-            </div>
-          ))}
+          {loading && bestsellers.length === 0
+            ? Array.from({ length: 4 }).map((_, i) => (
+                <div key={`sk-${i}`} className="space-y-3">
+                  <div className="aspect-[3/4] skeleton-shimmer rounded-sm" />
+                  <div className="h-3 skeleton-shimmer rounded-sm w-3/4" />
+                  <div className="h-3 skeleton-shimmer rounded-sm w-1/3" />
+                </div>
+              ))
+            : bestsellers.map((product, i) => (
+                <div key={product.id} className="reveal" style={{ transitionDelay: `${i * 80}ms` }}>
+                  <ProductCard product={product} />
+                </div>
+              ))}
         </div>
       </section>
 
