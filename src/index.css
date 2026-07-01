@@ -510,11 +510,22 @@
   .hc-item:nth-child(6) { left: calc(50% + 450px); opacity: 0; }
 }
 @media (max-width: 640px) {
-  .hc-item { width: 110px; height: 170px; }
-  .hc-item:nth-child(3) { left: 50%; }
-  .hc-item:nth-child(4) { left: calc(50% + 120px); }
-  .hc-item:nth-child(5) { left: calc(50% + 240px); }
-  .hc-item:nth-child(6) { left: calc(50% + 360px); opacity: 0; }
+  /* On phones, hide the offscreen thumbnail rail entirely and cross-fade
+     the active slide for a smoother, less "robotic" feel. */
+  .hc-item {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0 !important;
+    transform: none;
+    border-radius: 0;
+    box-shadow: none;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+  }
+  .hc-item:nth-child(1) { opacity: 0; }
+  .hc-item:nth-child(2) { opacity: 1; }
+  .hc-item:nth-child(n+3) { opacity: 0; pointer-events: none; }
   .hc-dots { bottom: 1.25rem; }
   .hc-nav { bottom: 1rem; right: 1rem; }
 }
