@@ -39,18 +39,32 @@ export default function Navbar() {
       }`}
     >
       <div className="hanger-wrap section-padding">
-        {/* Hanger hook */}
-        <div className="hanger-hook" aria-hidden="true">
-          <svg viewBox="0 0 40 60" className="w-8 h-12 md:w-10 md:h-14">
-            <path
-              d="M20 60 V30 C20 18 30 14 30 8 A6 6 0 1 0 18 8"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
+        {/* Hanger truss: shoulder wires + hook */}
+        <svg
+          className="hanger-truss"
+          viewBox="0 0 1000 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient id="hangerWire" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stopColor="hsl(var(--hanger-trim))" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="hsl(var(--hanger-body))" stopOpacity="0.95" />
+            </linearGradient>
+          </defs>
+          {/* left shoulder */}
+          <path d="M 40 118 Q 260 30 500 40" fill="none" stroke="url(#hangerWire)" strokeWidth="2.5" strokeLinecap="round" />
+          {/* right shoulder */}
+          <path d="M 960 118 Q 740 30 500 40" fill="none" stroke="url(#hangerWire)" strokeWidth="2.5" strokeLinecap="round" />
+          {/* hook */}
+          <path
+            d="M 500 40 V 22 C 500 10 520 6 520 -6"
+            fill="none"
+            stroke="hsl(var(--hanger-trim))"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+        </svg>
 
         {/* Hanger bar */}
         <nav className="hanger-bar" aria-label="Primary">
