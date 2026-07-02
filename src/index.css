@@ -648,9 +648,17 @@
   text-transform: uppercase;
   border-radius: 8px;
   position: relative;
-  transition: color 0.2s ease;
+  transition: color 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.hanger-link:hover { color: hsl(var(--hanger-trim)); }
+.hanger-link svg {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 0.3s ease;
+}
+.hanger-link:hover { color: hsl(var(--hanger-trim)); transform: translateY(-2px); }
+.hanger-link:hover svg {
+  transform: translateY(-2px) scale(1.15);
+  filter: drop-shadow(0 2px 4px hsl(var(--hanger-trim) / 0.5));
+}
 .hanger-link.is-active { color: hsl(var(--hanger-trim)); }
 .hanger-link.is-active::after {
   content: "";
@@ -661,6 +669,11 @@
   height: 1.5px;
   background: hsl(var(--hanger-trim));
   border-radius: 2px;
+  animation: hangerUnderline 0.4s ease-out;
+}
+@keyframes hangerUnderline {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }
 
 .hanger-actions {
@@ -737,8 +750,22 @@
   inset: 3px 2px;
   border-radius: 2px;
   background: radial-gradient(circle at 50% 50%, hsl(var(--hanger-trim)) 0 30%, transparent 32%);
+  animation: hangerRivet 2.6s ease-in-out infinite;
 }
+@keyframes hangerRivet {
+  0%, 100% { filter: drop-shadow(0 0 0 hsl(var(--hanger-trim) / 0)); }
+  50%      { filter: drop-shadow(0 0 6px hsl(var(--hanger-trim) / 0.7)); }
+}
+.hanger-cart:hover .hanger-strap::after { animation-duration: 0.9s; }
 .hanger-cart-count { color: hsl(var(--hanger-trim)); }
+
+.hanger-tag {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+.hanger-tag:hover {
+  transform: translateY(-1px) rotate(-1deg);
+  box-shadow: 0 6px 14px -6px hsl(0 0% 0% / 0.5);
+}
 
 .hanger-mobile {
   background: linear-gradient(180deg, hsl(var(--hanger-body)), hsl(var(--hanger-body-2)));
