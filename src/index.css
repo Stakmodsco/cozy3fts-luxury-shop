@@ -44,6 +44,12 @@
     --warm-gray: 30 5% 55%;
     --espresso: 25 20% 25%;
 
+    /* Hanger navbar tokens */
+    --hanger-body: 25 22% 14%;
+    --hanger-body-2: 25 20% 10%;
+    --hanger-ink: 40 30% 94%;
+    --hanger-trim: 38 55% 62%;
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -89,6 +95,11 @@
     --cream: 25 12% 12%;
     --warm-gray: 30 5% 50%;
     --espresso: 30 10% 70%;
+
+    --hanger-body: 25 20% 9%;
+    --hanger-body-2: 25 18% 6%;
+    --hanger-ink: 40 30% 94%;
+    --hanger-trim: 38 60% 60%;
 
     --sidebar-background: 25 15% 10%;
     --sidebar-foreground: 40 15% 80%;
