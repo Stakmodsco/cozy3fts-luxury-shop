@@ -557,33 +557,38 @@
   flex-direction: column;
   align-items: center;
   animation: hangerDrop 0.9s cubic-bezier(0.34, 1.4, 0.64, 1) both;
-  transform-origin: 50% -40px;
+  transform-origin: 15% -60px;
 }
 .hanger-wrap:hover { animation: hangerSway 2.4s ease-in-out infinite; }
 
 @keyframes hangerDrop {
-  0%   { transform: translateY(-40px) rotate(-6deg); opacity: 0; }
-  60%  { transform: translateY(4px) rotate(3deg); opacity: 1; }
+  0%   { transform: translateY(-40px) rotate(-4deg); opacity: 0; }
+  60%  { transform: translateY(4px) rotate(2deg); opacity: 1; }
   100% { transform: translateY(0) rotate(0); opacity: 1; }
 }
 @keyframes hangerSway {
-  0%, 100% { transform: rotate(-0.6deg); }
-  50%      { transform: rotate(0.6deg); }
+  0%, 100% { transform: rotate(-0.4deg); }
+  50%      { transform: rotate(0.4deg); }
 }
 
-.hanger-truss {
+.hanger-hook {
   position: absolute;
-  bottom: calc(100% - 14px);
-  left: 0;
-  right: 0;
-  width: 100%;
-  max-width: 1180px;
-  margin: 0 auto;
-  height: 70px;
+  bottom: calc(100% - 18px);
+  /* Align above the left shoulder tag */
+  left: calc(50% - 560px + 60px);
+  width: 48px;
+  height: 74px;
   overflow: visible;
   pointer-events: none;
-  filter: drop-shadow(0 2px 3px hsl(0 0% 0% / 0.35));
+  filter: drop-shadow(0 2px 4px hsl(var(--hanger-shadow)));
 }
+@media (max-width: 1200px) {
+  .hanger-hook { left: 4rem; }
+}
+@media (max-width: 900px) {
+  .hanger-hook { left: 2.5rem; width: 38px; height: 58px; }
+}
+
 .hanger-bar {
   margin-top: 0;
   position: relative;
@@ -592,35 +597,64 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.75rem 0.5rem 0.5rem;
-  background: linear-gradient(180deg, hsl(var(--hanger-body)), hsl(var(--hanger-body-2)));
+  padding: 0.5rem 0.5rem 0.5rem 0;
+  background:
+    linear-gradient(180deg, hsl(var(--hanger-glass)), hsl(var(--hanger-glass-2)));
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
   color: hsl(var(--hanger-ink));
   border-radius: 999px;
-  border: 1px solid hsl(var(--hanger-trim) / 0.35);
+  border: 1px solid hsl(var(--hanger-trim) / 0.4);
   box-shadow:
-    0 1px 0 hsl(var(--hanger-trim) / 0.25) inset,
-    0 -1px 0 hsl(0 0% 0% / 0.4) inset,
-    0 20px 40px -20px hsl(0 0% 0% / 0.5);
+    0 1px 0 hsl(var(--hanger-trim) / 0.35) inset,
+    0 -1px 0 hsl(var(--hanger-shadow)) inset,
+    0 20px 50px -20px hsl(var(--hanger-shadow)),
+    0 8px 24px -12px hsl(var(--hanger-shadow));
 }
+
+/* Triangular shoulder plate — the hanger's left "wing" */
 .hanger-tag {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.9rem 0.35rem 0.6rem;
-  background: linear-gradient(180deg, hsl(var(--hanger-body-2)), hsl(var(--hanger-body)));
-  border-radius: 999px;
-  border: 1px solid hsl(var(--hanger-trim) / 0.45);
   flex-shrink: 0;
+  width: 150px;
+  height: 58px;
+  padding: 0 0.5rem 0 0.9rem;
+  color: hsl(var(--hanger-trim));
+  background: linear-gradient(135deg, hsl(var(--hanger-glass)), hsl(var(--hanger-glass-2)));
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid hsl(var(--hanger-trim) / 0.45);
+  border-right: none;
+  /* Triangle wing shape — flat top-left, angled bottom-right into the bar */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 30% 100%);
+  margin-left: -0.5rem;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hanger-tag:hover { transform: translateY(-1px) rotate(-1deg); }
+.hanger-tag-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding-right: 0.5rem;
+}
+.hanger-tag-icon { width: 26px; height: 20px; color: hsl(var(--hanger-trim)); }
+.hanger-tag-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: hsl(var(--hanger-trim));
+  line-height: 1;
 }
 .hanger-tag-sub {
   font-family: 'DM Sans', sans-serif;
-  font-size: 9px;
+  font-size: 8px;
   letter-spacing: 0.25em;
-  color: hsl(var(--hanger-trim));
-  display: none;
+  color: hsl(var(--hanger-trim) / 0.75);
 }
-@media (min-width: 900px) { .hanger-tag-sub { display: inline; } }
 
 .hanger-nav {
   display: none;
@@ -637,17 +671,17 @@
 .hanger-nav-item { display: flex; align-items: center; }
 .hanger-sep {
   width: 1px;
-  height: 22px;
-  background: linear-gradient(180deg, transparent, hsl(var(--hanger-trim) / 0.5), transparent);
+  height: 28px;
+  background: linear-gradient(180deg, transparent, hsl(var(--hanger-trim) / 0.4), transparent);
   margin: 0 2px;
 }
 .hanger-link {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   padding: 0.35rem 0.9rem;
-  color: hsl(var(--hanger-ink) / 0.75);
+  color: hsl(var(--hanger-ink) / 0.8);
   font-family: 'DM Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.18em;
@@ -660,19 +694,19 @@
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
               filter 0.3s ease;
 }
-.hanger-link:hover { color: hsl(var(--hanger-trim)); transform: translateY(-2px); }
+.hanger-link:hover { color: hsl(var(--hanger-trim)); transform: translateY(-3px); }
 .hanger-link:hover svg {
-  transform: translateY(-2px) scale(1.15);
+  transform: translateY(-2px) scale(1.18);
   filter: drop-shadow(0 2px 4px hsl(var(--hanger-trim) / 0.5));
 }
 .hanger-link.is-active { color: hsl(var(--hanger-trim)); }
 .hanger-link.is-active::after {
   content: "";
   position: absolute;
-  bottom: -2px;
-  left: 25%;
-  right: 25%;
-  height: 1.5px;
+  bottom: 2px;
+  left: 30%;
+  right: 30%;
+  height: 2px;
   background: hsl(var(--hanger-trim));
   border-radius: 2px;
   animation: hangerUnderline 0.4s ease-out;
@@ -702,7 +736,7 @@
 }
 .hanger-icon-btn:hover {
   color: hsl(var(--hanger-trim));
-  background: hsl(var(--hanger-trim) / 0.08);
+  background: hsl(var(--hanger-trim) / 0.12);
 }
 .hanger-badge {
   position: absolute;
@@ -713,7 +747,7 @@
   padding: 0 4px;
   border-radius: 999px;
   background: hsl(var(--hanger-trim));
-  color: hsl(var(--hanger-body-2));
+  color: hsl(var(--hanger-body));
   font-size: 9px;
   font-weight: 600;
   display: flex;
@@ -721,60 +755,80 @@
   justify-content: center;
 }
 
+/* Right leather-strap cart closure */
 .hanger-cart {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.9rem 0.45rem 1.1rem;
-  border-radius: 999px;
-  background: linear-gradient(180deg, hsl(var(--hanger-body-2)), hsl(var(--hanger-body)));
+  height: 58px;
+  padding: 0 1.25rem 0 2rem;
+  margin-right: -0.5rem;
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(135deg, hsl(var(--hanger-glass-2)), hsl(var(--hanger-glass)));
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid hsl(var(--hanger-trim) / 0.45);
+  border-left: none;
   color: hsl(var(--hanger-ink));
   font-family: 'DM Sans', sans-serif;
   font-size: 11px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.hanger-cart:hover { transform: translateY(-1px); }
+.hanger-cart:hover { transform: translateY(-1px) rotate(0.5deg); }
+.hanger-cart-inner {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  color: hsl(var(--hanger-trim));
+}
+.hanger-cart-count {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: hsl(var(--hanger-trim));
+}
+
+/* Vertical strap with gold rivet — sits at the join between bar and cart */
 .hanger-strap {
   position: absolute;
-  left: -6px;
+  left: 6px;
   top: 50%;
   transform: translateY(-50%);
-  width: 10px;
-  height: 26px;
-  border-radius: 3px;
-  background: hsl(var(--hanger-body-2));
+  width: 14px;
+  height: 66px;
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, hsl(var(--hanger-trim) / 0.15), hsl(var(--hanger-shadow)));
   border: 1px solid hsl(var(--hanger-trim) / 0.5);
-  box-shadow: 0 0 0 2px hsl(var(--hanger-body-2));
+  box-shadow:
+    0 0 0 3px hsl(var(--hanger-glass-2)),
+    0 2px 6px hsl(var(--hanger-shadow));
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.hanger-strap::after {
-  content: "";
-  position: absolute;
-  inset: 3px 2px;
-  border-radius: 2px;
-  background: radial-gradient(circle at 50% 50%, hsl(var(--hanger-trim)) 0 30%, transparent 32%);
+.hanger-rivet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, hsl(45 90% 75%), hsl(var(--hanger-trim)) 60%, hsl(35 60% 30%));
+  box-shadow:
+    0 0 0 1px hsl(35 60% 30% / 0.6),
+    0 0 8px hsl(var(--hanger-trim) / 0.7);
   animation: hangerRivet 2.6s ease-in-out infinite;
 }
 @keyframes hangerRivet {
-  0%, 100% { filter: drop-shadow(0 0 0 hsl(var(--hanger-trim) / 0)); }
-  50%      { filter: drop-shadow(0 0 6px hsl(var(--hanger-trim) / 0.7)); }
+  0%, 100% { box-shadow: 0 0 0 1px hsl(35 60% 30% / 0.6), 0 0 4px hsl(var(--hanger-trim) / 0.4); }
+  50%      { box-shadow: 0 0 0 1px hsl(35 60% 30% / 0.6), 0 0 12px hsl(var(--hanger-trim) / 0.9); }
 }
-.hanger-cart:hover .hanger-strap::after { animation-duration: 0.9s; }
-.hanger-cart-count { color: hsl(var(--hanger-trim)); }
-
-.hanger-tag {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-}
-.hanger-tag:hover {
-  transform: translateY(-1px) rotate(-1deg);
-  box-shadow: 0 6px 14px -6px hsl(0 0% 0% / 0.5);
-}
+.hanger-cart:hover .hanger-rivet { animation-duration: 1s; }
 
 .hanger-mobile {
-  background: linear-gradient(180deg, hsl(var(--hanger-body)), hsl(var(--hanger-body-2)));
+  background: linear-gradient(180deg, hsl(var(--hanger-glass)), hsl(var(--hanger-glass-2)));
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
   color: hsl(var(--hanger-ink));
   border: 1px solid hsl(var(--hanger-trim) / 0.35);
   border-radius: 18px;
