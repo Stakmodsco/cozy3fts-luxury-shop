@@ -3,7 +3,6 @@ import { ShoppingBag, Menu, X, Heart, Home, Shirt, Tag, Sparkles, User, Mail } f
 import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 import { useState, useEffect } from "react";
-import logo from "@/assets/logo.png";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Navbar() {
@@ -39,43 +38,34 @@ export default function Navbar() {
       }`}
     >
       <div className="hanger-wrap section-padding">
-        {/* Hanger truss: shoulder wires + hook */}
+        {/* Hook rising above the left shoulder */}
         <svg
-          className="hanger-truss"
-          viewBox="0 0 1000 120"
-          preserveAspectRatio="none"
+          className="hanger-hook"
+          viewBox="0 0 60 90"
           aria-hidden="true"
         >
-          <defs>
-            <linearGradient id="hangerWire" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor="hsl(var(--hanger-trim))" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="hsl(var(--hanger-body))" stopOpacity="0.95" />
-            </linearGradient>
-          </defs>
-          {/* left shoulder */}
-          <path d="M 40 118 Q 260 30 500 40" fill="none" stroke="url(#hangerWire)" strokeWidth="2.5" strokeLinecap="round" />
-          {/* right shoulder */}
-          <path d="M 960 118 Q 740 30 500 40" fill="none" stroke="url(#hangerWire)" strokeWidth="2.5" strokeLinecap="round" />
-          {/* hook */}
           <path
-            d="M 500 40 V 22 C 500 10 520 6 520 -6"
+            d="M30 90 V 40 C 30 22 46 18 46 6"
             fill="none"
             stroke="hsl(var(--hanger-trim))"
-            strokeWidth="3"
+            strokeWidth="3.5"
             strokeLinecap="round"
           />
         </svg>
 
         {/* Hanger bar */}
         <nav className="hanger-bar" aria-label="Primary">
-          {/* Left brand tag */}
+          {/* Left triangular shoulder plate with brand */}
           <Link to="/" className="hanger-tag" aria-label="CoZy 3Fts home">
-            <img
-              src={logo}
-              alt="CoZy 3Fts"
-              className="h-7 md:h-9 w-auto brightness-0 invert"
-            />
-            <span className="hanger-tag-sub">EST. 2024</span>
+            <div className="hanger-tag-inner">
+              <svg className="hanger-tag-icon" viewBox="0 0 40 30" aria-hidden="true">
+                <path d="M20 6 V 12 M20 12 C 12 12 6 18 6 26 L 34 26 C 34 18 28 12 20 12 Z"
+                  fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <circle cx="20" cy="5" r="2.5" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+              </svg>
+              <span className="hanger-tag-name">CoZy</span>
+              <span className="hanger-tag-sub">EST. 2024</span>
+            </div>
           </Link>
 
           {/* Center nav items — desktop */}
@@ -104,15 +94,19 @@ export default function Navbar() {
               {wishlistCount > 0 && <span className="hanger-badge">{wishlistCount}</span>}
             </Link>
 
-            {/* Cart strap */}
+            {/* Cart strap closure */}
             <button
               onClick={() => setIsOpen(true)}
               className="hanger-cart"
               aria-label="Open cart"
             >
-              <span className="hanger-strap" aria-hidden="true" />
-              <ShoppingBag className="w-4 h-4" strokeWidth={1.5} />
-              <span className="hanger-cart-count">({totalItems})</span>
+              <span className="hanger-strap" aria-hidden="true">
+                <span className="hanger-rivet" />
+              </span>
+              <span className="hanger-cart-inner">
+                <ShoppingBag className="w-4 h-4" strokeWidth={1.5} />
+                <span className="hanger-cart-count">CART ({totalItems})</span>
+              </span>
             </button>
 
             <button
