@@ -49,6 +49,13 @@
     --hanger-body-2: 25 20% 10%;
     --hanger-ink: 40 30% 94%;
     --hanger-trim: 38 55% 62%;
+    /* Glassmorphism */
+    --hanger-glass: 30 20% 96% / 0.55;
+    --hanger-glass-2: 30 20% 92% / 0.35;
+    --hanger-glass-border: 30 15% 30% / 0.18;
+    --hanger-glass-highlight: 0 0% 100% / 0.55;
+    --hanger-glass-shadow: 25 30% 15% / 0.18;
+    --hanger-ink-glass: 25 25% 15%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -100,6 +107,12 @@
     --hanger-body-2: 25 18% 6%;
     --hanger-ink: 40 30% 94%;
     --hanger-trim: 38 60% 60%;
+    --hanger-glass: 25 20% 12% / 0.55;
+    --hanger-glass-2: 25 18% 8% / 0.4;
+    --hanger-glass-border: 38 60% 60% / 0.22;
+    --hanger-glass-highlight: 40 40% 90% / 0.08;
+    --hanger-glass-shadow: 0 0% 0% / 0.5;
+    --hanger-ink-glass: 40 30% 94%;
 
     --sidebar-background: 25 15% 10%;
     --sidebar-foreground: 40 15% 80%;
@@ -587,14 +600,16 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem 0.5rem 0.5rem;
-  background: linear-gradient(180deg, hsl(var(--hanger-body)), hsl(var(--hanger-body-2)));
-  color: hsl(var(--hanger-ink));
+  background: linear-gradient(180deg, hsl(var(--hanger-glass)), hsl(var(--hanger-glass-2)));
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  color: hsl(var(--hanger-ink-glass));
   border-radius: 999px;
-  border: 1px solid hsl(var(--hanger-trim) / 0.35);
+  border: 1px solid hsl(var(--hanger-glass-border));
   box-shadow:
-    0 1px 0 hsl(var(--hanger-trim) / 0.25) inset,
-    0 -1px 0 hsl(0 0% 0% / 0.4) inset,
-    0 20px 40px -20px hsl(0 0% 0% / 0.5);
+    0 1px 0 hsl(var(--hanger-glass-highlight)) inset,
+    0 -1px 0 hsl(var(--hanger-glass-shadow)) inset,
+    0 20px 40px -20px hsl(var(--hanger-glass-shadow));
 }
 .hanger-tag {
   position: relative;
@@ -602,9 +617,11 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.35rem 0.9rem 0.35rem 0.6rem;
-  background: linear-gradient(180deg, hsl(var(--hanger-body-2)), hsl(var(--hanger-body)));
+  background: linear-gradient(180deg, hsl(var(--hanger-glass-2)), hsl(var(--hanger-glass)));
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
   border-radius: 999px;
-  border: 1px solid hsl(var(--hanger-trim) / 0.45);
+  border: 1px solid hsl(var(--hanger-glass-border));
   flex-shrink: 0;
 }
 .hanger-tag-sub {
@@ -641,7 +658,7 @@
   align-items: center;
   gap: 2px;
   padding: 0.35rem 0.9rem;
-  color: hsl(var(--hanger-ink) / 0.75);
+  color: hsl(var(--hanger-ink-glass) / 0.8);
   font-family: 'DM Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.18em;
@@ -691,7 +708,7 @@
   width: 34px;
   height: 34px;
   border-radius: 999px;
-  color: hsl(var(--hanger-ink));
+  color: hsl(var(--hanger-ink-glass));
   transition: color 0.2s ease, background 0.2s ease;
 }
 .hanger-icon-btn:hover {
@@ -722,9 +739,11 @@
   gap: 0.4rem;
   padding: 0.45rem 0.9rem 0.45rem 1.1rem;
   border-radius: 999px;
-  background: linear-gradient(180deg, hsl(var(--hanger-body-2)), hsl(var(--hanger-body)));
-  border: 1px solid hsl(var(--hanger-trim) / 0.45);
-  color: hsl(var(--hanger-ink));
+  background: linear-gradient(180deg, hsl(var(--hanger-glass-2)), hsl(var(--hanger-glass)));
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid hsl(var(--hanger-glass-border));
+  color: hsl(var(--hanger-ink-glass));
   font-family: 'DM Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.14em;
@@ -740,9 +759,11 @@
   width: 10px;
   height: 26px;
   border-radius: 3px;
-  background: hsl(var(--hanger-body-2));
-  border: 1px solid hsl(var(--hanger-trim) / 0.5);
-  box-shadow: 0 0 0 2px hsl(var(--hanger-body-2));
+  background: hsl(var(--hanger-glass-2));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid hsl(var(--hanger-glass-border));
+  box-shadow: 0 0 0 2px hsl(var(--hanger-glass-2));
 }
 .hanger-strap::after {
   content: "";
@@ -768,9 +789,12 @@
 }
 
 .hanger-mobile {
-  background: linear-gradient(180deg, hsl(var(--hanger-body)), hsl(var(--hanger-body-2)));
-  color: hsl(var(--hanger-ink));
-  border: 1px solid hsl(var(--hanger-trim) / 0.35);
+  background: linear-gradient(180deg, hsl(var(--hanger-glass)), hsl(var(--hanger-glass-2)));
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  color: hsl(var(--hanger-ink-glass));
+  border: 1px solid hsl(var(--hanger-glass-border));
+  box-shadow: 0 20px 40px -20px hsl(var(--hanger-glass-shadow));
   border-radius: 18px;
   padding: 0.6rem 0.75rem;
   display: flex;
@@ -786,7 +810,7 @@
   font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: hsl(var(--hanger-ink) / 0.8);
+  color: hsl(var(--hanger-ink-glass) / 0.85);
   border-radius: 10px;
 }
 .hanger-mobile-link.is-active,
