@@ -73,7 +73,7 @@ export default function Navbar() {
             <img
               src={logo}
               alt="CoZy 3Fts"
-              className="h-7 md:h-9 w-auto brightness-0 invert"
+              className="h-7 md:h-9 w-auto brightness-0 dark:invert"
             />
             <span className="hanger-tag-sub">EST. 2024</span>
           </Link>
