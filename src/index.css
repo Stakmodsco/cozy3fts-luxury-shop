@@ -49,6 +49,13 @@
     --hanger-body-2: 25 20% 10%;
     --hanger-ink: 40 30% 94%;
     --hanger-trim: 38 55% 62%;
+    /* Glassmorphism */
+    --hanger-glass: 30 20% 96% / 0.55;
+    --hanger-glass-2: 30 20% 92% / 0.35;
+    --hanger-glass-border: 30 15% 30% / 0.18;
+    --hanger-glass-highlight: 0 0% 100% / 0.55;
+    --hanger-glass-shadow: 25 30% 15% / 0.18;
+    --hanger-ink-glass: 25 25% 15%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -100,6 +107,12 @@
     --hanger-body-2: 25 18% 6%;
     --hanger-ink: 40 30% 94%;
     --hanger-trim: 38 60% 60%;
+    --hanger-glass: 25 20% 12% / 0.55;
+    --hanger-glass-2: 25 18% 8% / 0.4;
+    --hanger-glass-border: 38 60% 60% / 0.22;
+    --hanger-glass-highlight: 40 40% 90% / 0.08;
+    --hanger-glass-shadow: 0 0% 0% / 0.5;
+    --hanger-ink-glass: 40 30% 94%;
 
     --sidebar-background: 25 15% 10%;
     --sidebar-foreground: 40 15% 80%;
