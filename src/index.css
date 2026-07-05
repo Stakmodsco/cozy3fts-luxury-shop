@@ -734,12 +734,38 @@
 }
 
 .new-in-flow {
-  animation: newInFlow 1.6s ease-in-out infinite;
+  will-change: transform, opacity;
+  animation: newInFlow 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  filter: drop-shadow(0 2px 6px hsl(var(--hanger-trim) / 0.45));
 }
 @keyframes newInFlow {
-  0%, 100% { transform: translateY(0); opacity: 1; }
-  50%      { transform: translateY(3px); opacity: 0.75; }
+  0% {
+    transform: translateY(-6px) scale(0.9);
+    opacity: 0.55;
+  }
+  40% {
+    transform: translateY(1px) scale(1);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(5px) scale(1.02);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-6px) scale(0.9);
+    opacity: 0.55;
+  }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .new-in-flow {
+    animation: none;
+    transform: translateY(1px);
+    opacity: 0.85;
+    filter: drop-shadow(0 1px 3px hsl(var(--hanger-trim) / 0.25));
+  }
+}
+
 
 
 .hanger-actions {
