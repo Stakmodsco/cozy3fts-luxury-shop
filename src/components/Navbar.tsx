@@ -27,7 +27,7 @@ export default function Navbar() {
     { to: "/", label: "Home", Icon: Home },
     { to: "/shop", label: "Shop", Icon: Shirt },
     { to: "/thrift", label: "Thrift", Icon: Tag },
-    { to: "/new-arrivals", label: "New In", Icon: Sparkles },
+    { to: "/new-arrivals", label: "New In", Icon: ArrowDownToLine },
     { to: "/about", label: "About", Icon: User },
     { to: "/contact", label: "Contact", Icon: Mail },
   ];
