@@ -138,7 +138,7 @@ export default function Navbar() {
                 to={to}
                 className={`hanger-mobile-link ${location.pathname === to ? "is-active" : ""}`}
               >
-                <Icon className="w-4 h-4" strokeWidth={1.5} />
+                <Icon className={`w-4 h-4 ${label === "New In" ? "new-in-flow" : ""}`} strokeWidth={1.5} />
                 <span>{label}</span>
               </Link>
             ))}
