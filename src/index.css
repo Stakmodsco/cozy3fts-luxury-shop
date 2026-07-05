@@ -612,7 +612,45 @@
     0 1px 0 hsl(var(--hanger-glass-highlight)) inset,
     0 -1px 0 hsl(var(--hanger-glass-shadow)) inset,
     0 20px 40px -20px hsl(var(--hanger-glass-shadow));
+  transition:
+    transform 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+    background 0.5s ease;
+  overflow: hidden;
 }
+.hanger-bar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(var(--hanger-trim) / 0.08) 45%,
+    hsl(var(--hanger-trim) / 0.12) 55%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+.hanger-wrap:hover .hanger-bar {
+  transform: scale(1.012);
+  background: linear-gradient(180deg, hsl(var(--hanger-glass) / 0.85), hsl(var(--hanger-glass-2) / 0.95));
+  box-shadow:
+    0 1px 0 hsl(var(--hanger-glass-highlight)) inset,
+    0 -1px 0 hsl(var(--hanger-glass-shadow)) inset,
+    0 28px 60px -20px hsl(var(--hanger-glass-shadow) / 0.7),
+    0 0 40px -10px hsl(var(--hanger-trim) / 0.15);
+}
+.hanger-wrap:hover .hanger-bar::before {
+  animation: hangerShimmer 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+@keyframes hangerShimmer {
+  0%   { opacity: 0; transform: translateX(-100%); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(100%); }
+}
+
 .hanger-tag {
   position: relative;
   display: flex;
