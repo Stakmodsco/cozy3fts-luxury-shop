@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { ShoppingBag, Menu, X, Heart, Home, Shirt, Tag, Sparkles, User, Mail } from "lucide-react";
+import { ShoppingBag, Menu, X, Heart, Home, Shirt, Tag, ArrowDownToLine, User, Mail } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 import { useState, useEffect } from "react";
