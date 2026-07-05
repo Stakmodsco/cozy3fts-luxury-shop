@@ -85,7 +85,7 @@ export default function Navbar() {
               return (
                 <li key={to} className="hanger-nav-item">
                   <Link to={to} className={`hanger-link ${active ? "is-active" : ""}`}>
-                    <Icon className="w-4 h-4 lg:w-[18px] lg:h-[18px]" strokeWidth={1.5} />
+                    <Icon className={`w-4 h-4 lg:w-[18px] lg:h-[18px] ${label === "New In" ? "new-in-flow" : ""}`} strokeWidth={1.5} />
                     <span>{label}</span>
                   </Link>
                   {i < navLinks.length - 1 && <span className="hanger-sep" aria-hidden="true" />}
