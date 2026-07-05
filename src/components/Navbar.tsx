@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { ShoppingBag, Menu, X, Heart, Home, Shirt, Tag, Sparkles, User, Mail } from "lucide-react";
+import { ShoppingBag, Menu, X, Heart, Home, Shirt, Tag, ArrowDownToLine, User, Mail } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 import { useState, useEffect } from "react";
@@ -27,7 +27,7 @@ export default function Navbar() {
     { to: "/", label: "Home", Icon: Home },
     { to: "/shop", label: "Shop", Icon: Shirt },
     { to: "/thrift", label: "Thrift", Icon: Tag },
-    { to: "/new-arrivals", label: "New In", Icon: Sparkles },
+    { to: "/new-arrivals", label: "New In", Icon: ArrowDownToLine },
     { to: "/about", label: "About", Icon: User },
     { to: "/contact", label: "Contact", Icon: Mail },
   ];
@@ -85,7 +85,7 @@ export default function Navbar() {
               return (
                 <li key={to} className="hanger-nav-item">
                   <Link to={to} className={`hanger-link ${active ? "is-active" : ""}`}>
-                    <Icon className="w-4 h-4 lg:w-[18px] lg:h-[18px]" strokeWidth={1.5} />
+                    <Icon className={`w-4 h-4 lg:w-[18px] lg:h-[18px] ${label === "New In" ? "new-in-flow" : ""}`} strokeWidth={1.5} />
                     <span>{label}</span>
                   </Link>
                   {i < navLinks.length - 1 && <span className="hanger-sep" aria-hidden="true" />}
@@ -138,7 +138,7 @@ export default function Navbar() {
                 to={to}
                 className={`hanger-mobile-link ${location.pathname === to ? "is-active" : ""}`}
               >
-                <Icon className="w-4 h-4" strokeWidth={1.5} />
+                <Icon className={`w-4 h-4 ${label === "New In" ? "new-in-flow" : ""}`} strokeWidth={1.5} />
                 <span>{label}</span>
               </Link>
             ))}

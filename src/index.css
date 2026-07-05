@@ -733,6 +733,15 @@
   to   { transform: scaleX(1); }
 }
 
+.new-in-flow {
+  animation: newInFlow 1.6s ease-in-out infinite;
+}
+@keyframes newInFlow {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50%      { transform: translateY(3px); opacity: 0.75; }
+}
+
+
 .hanger-actions {
   display: flex;
   align-items: center;
