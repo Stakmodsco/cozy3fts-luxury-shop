@@ -11,6 +11,7 @@ import CartDrawer from "@/components/CartDrawer";
 import ScrollToTop from "@/components/ScrollToTop";
 import BackToTop from "@/components/BackToTop";
 import Index from "./pages/Index";
+import { useImageProtection } from "@/hooks/useImageProtection";
 
 const Shop = lazy(() => import("./pages/Shop"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
@@ -36,6 +37,11 @@ const PageLoader = () => (
   </div>
 );
 
+const AppShell = ({ children }: { children: React.ReactNode }) => {
+  useImageProtection();
+  return <>{children}</>;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -43,6 +49,7 @@ const App = () => (
       <BrowserRouter>
         <CartProvider>
           <WishlistProvider>
+            <AppShell>
             <ScrollToTop />
             <Navbar />
             <CartDrawer />
@@ -70,6 +77,7 @@ const App = () => (
             </main>
             <Footer />
             <BackToTop />
+            </AppShell>
           </WishlistProvider>
         </CartProvider>
       </BrowserRouter>
