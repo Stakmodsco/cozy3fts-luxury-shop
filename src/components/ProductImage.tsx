@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import placeholder from "@/assets/logo.png";
 
 interface ProductImageProps {
@@ -11,26 +11,29 @@ interface ProductImageProps {
 export default function ProductImage({ src, alt, className = "", aspectClass = "aspect-[3/4]" }: ProductImageProps) {
   const [loaded, setLoaded] = useState(false);
   const [errored, setErrored] = useState(false);
-
-  // Security: render the real artwork as a CSS background on a <div>.
-  // This defeats "Save image as…", "Open image in new tab", and drag-to-save
-  // because there is no <img> vector for the browser's context menu to target.
-  // A 1x1 transparent <img> is layered on top only to preserve the alt text
-  // for accessibility and SEO — it carries no visual data.
   const resolvedSrc = errored || !src ? placeholder : src;
-  const TRANSPARENT_PX =
-    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
-  // Preload so we can flip the loaded state and swap in the background.
-  if (typeof window !== "undefined" && !loaded && !errored) {
-    const preloader = new Image();
-    preloader.onload = () => setLoaded(true);
-    preloader.onerror = () => {
+  useEffect(() => {
+    setLoaded(false);
+    setErrored(false);
+    const img = new Image();
+    let cancelled = false;
+    img.onload = () => !cancelled && setLoaded(true);
+    img.onerror = () => {
+      if (cancelled) return;
       setErrored(true);
       setLoaded(true);
     };
-    preloader.src = resolvedSrc;
-  }
+    img.src = src || placeholder;
+    return () => {
+      cancelled = true;
+    };
+  }, [src]);
+
+  // Real artwork is rendered as a CSS background — there's no <img> vector
+  // for "Save image as…" or "Open image in new tab" to target.
+  const TRANSPARENT_PX =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
   return (
     <div
