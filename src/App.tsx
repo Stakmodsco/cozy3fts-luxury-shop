@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import ScrollToTop from "@/components/ScrollToTop";
 import BackToTop from "@/components/BackToTop";
+import ScreenshotShield from "@/components/ScreenshotShield";
 import Index from "./pages/Index";
 import { useImageProtection } from "@/hooks/useImageProtection";
 
@@ -77,6 +78,7 @@ const App = () => (
             </main>
             <Footer />
             <BackToTop />
+            <ScreenshotShield />
             </AppShell>
           </WishlistProvider>
         </CartProvider>
