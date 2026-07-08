@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import placeholder from "@/assets/logo.png";
-import logoWatermark from "@/assets/logo.png";
 
 interface ProductImageProps {
   src: string;
@@ -73,20 +72,6 @@ export default function ProductImage({ src, alt, className = "", aspectClass = "
         onDragStart={(e) => e.preventDefault()}
         style={{ WebkitTouchCallout: "none", userSelect: "none" }}
       />
-      {/* Always-on tiled watermark — subtle in the UI, unmissable in any screenshot */}
-      {loaded && !errored && (
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-[0.18] dark:opacity-[0.22]"
-          style={{
-            backgroundImage: `url("${logoWatermark}")`,
-            backgroundRepeat: "repeat",
-            backgroundSize: "110px 110px",
-            transform: "rotate(-24deg) scale(1.4)",
-            transformOrigin: "center",
-          }}
-        />
-      )}
     </div>
   );
 }
