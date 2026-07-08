@@ -14,7 +14,7 @@ export default function ProductDetail() {
   const product = products.find((p) => p.id === id);
   const { addItem } = useCart();
   const [selectedSize, setSelectedSize] = useState("");
-  const revealRef = useReveal();
+  const revealRef = useReveal([loading, product?.id]);
 
   if (loading) {
     return (
